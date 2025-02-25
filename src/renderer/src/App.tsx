@@ -1,12 +1,11 @@
-import Versions from './components/Versions';
-import electronLogo from './assets/electron.svg';
+import Versions from "./components/Versions";
 
 function App(): JSX.Element {
-  const ipcHandle = (): void => window.electron.ipcRenderer.send('ping');
+  const ipcHandle = (): void => window.electron.ipcRenderer.send("ping");
 
   return (
     <>
-      <img alt="logo" className="logo" src={electronLogo} />
+      <p className="bg-primary text-violet-600">hello world</p>
       <div className="creator">Powered by electron-vite</div>
       <div className="text">
         Build an Electron app with <span className="react">React</span>

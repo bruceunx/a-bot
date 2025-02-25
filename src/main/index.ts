@@ -2,7 +2,7 @@ import { app, shell, BrowserWindow, ipcMain } from "electron";
 import { join } from "node:path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
-import { Agent } from "./agent";
+// import { Agent } from "./agent";
 
 function createWindow(): void {
   // Create the browser window.
@@ -47,8 +47,8 @@ app.whenReady().then(() => {
   // Set app user model id for windows
   electronApp.setAppUserModelId("com.electron");
 
-  const agent = new Agent();
-  agent.initialize();
+  // const agent = new Agent();
+  // agent.initialize();
 
   // Default open or close DevTools by F12 in development
   // and ignore CommandOrControl + R in production.
