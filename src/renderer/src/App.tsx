@@ -11,7 +11,7 @@ function App() {
   return (
     <MemoryRouter>
       <Routes>
-        <Route path="/" element={<Navigate to="/manage" replace />} />
+        <Route path="/" element={<Navigate to="/manage/overview" replace />} />
         <Route path="/" element={<Layout />}>
           <Route path="manage" element={<ManageLayout />}>
             <Route index element={<OverviewManage />} />
