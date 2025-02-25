@@ -1,2 +1,23 @@
 @import "tailwindcss";
 @plugin "daisyui";
+
+@font-face {
+	font-family: Dmsans;
+	src: url("../assets/fonts/DMSans.woff2") format("woff2");
+	font-style: normal;
+	font-weight: 100 1000;
+	font-display: swap;
+}
+
+@font-face {
+	font-family: Handlee;
+	src: url("../assets/fonts/Handlee.woff2") format("woff2");
+	font-weight: normal;
+	font-style: normal;
+	font-display: swap;
+}
+
+@theme {
+	--font-dmsans: "Dmsans", "sans-serif";
+	--font-handless: "Handlee", "sans-serif";
+}
