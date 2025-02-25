@@ -1,33 +1,27 @@
-import Versions from "./components/Versions";
+import { MemoryRouter, Navigate, Route, Routes } from "react-router-dom";
+import Layout from "./components/layout";
+import Account from "./components/Account";
+import OverviewManage from "./components/Manage/OverviewManage";
+import UserManage from "./components/Manage/UserManage";
+import ManageLayout from "./components/Manage/ManageLayout";
 
-function App(): JSX.Element {
-  const ipcHandle = (): void => window.electron.ipcRenderer.send("ping");
+function App() {
+  // const ipcHandle = (): void => window.electron.ipcRenderer.send("ping");
 
   return (
-    <>
-      <p className="bg-primary text-violet-600">hello world</p>
-      <div className="creator">Powered by electron-vite</div>
-      <div className="text">
-        Build an Electron app with <span className="react">React</span>
-        &nbsp;and <span className="ts">TypeScript</span>
-      </div>
-      <p className="tip">
-        Please try pressing <code>F12</code> to open the devTool
-      </p>
-      <div className="actions">
-        <div className="action">
-          <a href="https://electron-vite.org/" target="_blank" rel="noreferrer">
-            Documentation
-          </a>
-        </div>
-        <div className="action">
-          <button type="button" rel="noreferrer" onClick={ipcHandle}>
-            Send IPC
-          </button>
-        </div>
-      </div>
-      <Versions />
-    </>
+    <MemoryRouter>
+      <Routes>
+        <Route path="/" element={<Navigate to="/manage" replace />} />
+        <Route path="/" element={<Layout />}>
+          <Route path="manage" element={<ManageLayout />}>
+            <Route index element={<OverviewManage />} />
+            <Route path="overview" element={<OverviewManage />} />
+            <Route path="account" element={<UserManage />} />
+          </Route>
+          <Route path="account" element={<Account />} />
+        </Route>
+      </Routes>
+    </MemoryRouter>
   );
 }
 
