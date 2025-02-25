@@ -1,10 +1,11 @@
-import type { Browser } from "playwright";
+import type { Browser, Page } from "playwright";
 import { chromium } from "playwright";
-import { app } from "electron";
-import { path } from "node:path";
+// import { app } from "electron";
+// import { path } from "node:path";
 
 export class Agent {
-  private browser: Browser;
+  private browser!: Browser;
+  private page!: Page;
 
   async initialize() {
     const chromePaths = {
@@ -21,6 +22,17 @@ export class Agent {
         executablePath: defaultChromePath,
         args: ["--no-sandbox", "--disable-setuid-sandbox", "--disable-dev-shm-usage"]
       });
+
+      this.page = await this.browser.newPage();
+      await this.page.setViewportSize({ width: 1280, height: 800 });
+
+      // Navigate to the start URL
+      // test
+      // await this.page.goto("https://ipinfo.io", {
+      //   waitUntil: "domcontentloaded",
+      //   timeout: 30000 // 30 seconds timeout
+      // });
+
       console.log("Successfully launched Chrome from:", defaultChromePath);
     } catch (error) {
       console.error("Failed to launch Chrome from path:", defaultChromePath);
