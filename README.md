@@ -32,3 +32,9 @@ $ pnpm build:mac
 # For Linux
 $ pnpm build:linux
 ```
+
+## TODO
+
+- [ ] improve manage part overview
+- [ ] improve layout of account
+- [ ] improve layout of publish

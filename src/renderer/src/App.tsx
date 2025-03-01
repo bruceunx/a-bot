@@ -4,6 +4,7 @@ import Account from "./components/Account";
 import OverviewManage from "./components/Manage/OverviewManage";
 import UserManage from "./components/Manage/UserManage";
 import ManageLayout from "./components/Manage/ManageLayout";
+import Publish from "./components/Publish";
 
 function App() {
   // const ipcHandle = (): void => window.electron.ipcRenderer.send("ping");
@@ -19,6 +20,7 @@ function App() {
             <Route path="account" element={<UserManage />} />
           </Route>
           <Route path="account" element={<Account />} />
+          <Route path="publish" element={<Publish />} />
         </Route>
       </Routes>
     </MemoryRouter>
