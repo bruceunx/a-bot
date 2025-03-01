@@ -38,9 +38,12 @@ export default function Header() {
           <SingleMenu icon={<Edit size="20" />} label="一键发布" link="/publish" />
         </div>
         <div className="navbar-end gap-7">
-          <button type="button">开通VIP</button>
-          <button type="button">
+          <button type="button" className="hover:cursor-pointer">
+            开通VIP
+          </button>
+          <button type="button" className="hover:cursor-pointer">
             <User size="27" className="text-primary/70" />
+            {/* change to a dropmenu */}
           </button>
         </div>
       </nav>
