@@ -21,10 +21,6 @@ function VerticalSingleMenu(props: VerticalSingleMenuProps) {
   );
 }
 
-interface VerticalNavigationMenuProps {
-  menus: VerticalSingleMenuProps[];
-}
-
 export default function VerticalNavigationMenu() {
   return (
     <ul className="menu bg-base-200 w-56 gap-2">
