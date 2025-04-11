@@ -1,3 +1,4 @@
+import { Bell } from "lucide-react";
 import type { DataViewItem } from "@renderer/types";
 
 export default function OverviewManage() {
@@ -28,17 +29,24 @@ export default function OverviewManage() {
   return (
     <section className="p-5 bg-primary/5">
       <div className="bg-base-100 p-5 rounded-box flex flex-col gap-7 w-full">
-        <h2 className="font-semibold text-xl inline-flex items-center gap-2">
+        <h3 className="font-semibold text-xl inline-flex items-center gap-2">
           数据概览
           <span className="font-normal text-sm text-base-content">
             数据更新于 2025-03-23 08:12:12
           </span>
-        </h2>
+        </h3>
         <div className="flex flex-row justify-evenly w-full">
           {dataItems.map((item) => (
             <DataItem key={item.label} label={item.label} value={item.value} note={item.note} />
           ))}
         </div>
+      </div>
+      <div className="bg-base-100 p-5 rounded-box mt-7 flex flex-col gap-5">
+        <h3 className="inline-flex gap-2">
+          <Bell /> 消息通知
+        </h3>
+        <p>消息...</p>
+        <p>消息...</p>
       </div>
     </section>
   );
