@@ -1,5 +1,5 @@
 import type React from "react";
-import { Grid2x2XIcon, HomeIcon } from "lucide-react";
+import { Users, HomeIcon } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
 interface VerticalSingleMenuProps {
@@ -31,7 +31,7 @@ export default function VerticalNavigationMenu() {
       />
       <VerticalSingleMenu
         label="人员管理"
-        icon={<Grid2x2XIcon className="size-5" />}
+        icon={<Users className="size-5" />}
         links={["/manage/account"]}
       />
     </ul>

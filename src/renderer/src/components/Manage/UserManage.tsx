@@ -1,3 +1,7 @@
 export default function UserManage() {
-  return <p>用户管理</p>;
+  return (
+    <div className="p-2">
+      <h2>开发中...</h2>
+    </div>
+  );
 }

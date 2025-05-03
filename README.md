@@ -4,7 +4,7 @@ An Electron application with React and TypeScript
 
 ## TODO
 
-- [ ] implement home view
+- [x] implement home view
 
 - [ ] improve manage part overview
 - [ ] improve layout of account
