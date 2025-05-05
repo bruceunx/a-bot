@@ -1,8 +1,17 @@
-import type { ElectronAPI } from '@electron-toolkit/preload'
+import type { ElectronAPI } from "@electron-toolkit/preload";
+
+interface WebContentsAPI {
+  getWebContentsWithSession: (webContentsId: number) => Promise<{
+    id: number;
+    url: string;
+    title: string;
+    isLoading: boolean;
+  } | null>;
+}
 
 declare global {
   interface Window {
-    electron: ElectronAPI
-    api: unknown
+    electron: ElectronAPI;
+    api: WebContentsAPI;
   }
 }

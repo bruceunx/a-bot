@@ -1,11 +1,14 @@
-import { app, shell, BrowserWindow, ipcMain } from "electron";
+import { app, shell, BrowserWindow, ipcMain, webContents } from "electron";
 import { join } from "node:path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
 // import { Agent } from "./agent";
+// import { initialize, enable } from "@electron/remote/main";
 
 function createWindow(): void {
   // Create the browser window.
+  //
+  // initialize();
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
@@ -18,9 +21,12 @@ function createWindow(): void {
     ...(process.platform === "linux" ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, "../preload/index.js"),
-      sandbox: false
+      sandbox: false,
+      webviewTag: true
     }
   });
+
+  // enable(mainWindow.webContents);
 
   mainWindow.on("ready-to-show", () => {
     mainWindow.show();
@@ -59,6 +65,30 @@ app.whenReady().then(() => {
 
   // IPC test
   ipcMain.on("ping", () => console.log("pong"));
+
+  ipcMain.handle("get-web-contents", async (_, webContentsId: number) => {
+    try {
+      const contents = webContents.fromId(webContentsId);
+      if (!contents) {
+        return null;
+      }
+
+      // Get the session associated with these webContents
+      const browserSession = contents.session;
+
+      // Create a "safe" wrapper for session methods
+      // This exposes only specific functionality we want to allow
+      return {
+        id: contents.id,
+        url: contents.getURL(),
+        title: contents.getTitle(),
+        isLoading: contents.isLoading()
+      };
+    } catch (error) {
+      console.error("Error accessing webContents or session:", error);
+      return null;
+    }
+  });
 
   createWindow();
 

@@ -9,7 +9,7 @@ export default function AccountMenu() {
             <input type="text" placeholder="搜索账号" />
             <Search />
           </label>
-          <button type="button" className="btn btn-soft">
+          <button type="button" className="btn btn-primary">
             搜索
           </button>
         </div>
@@ -18,7 +18,7 @@ export default function AccountMenu() {
             <option>分组1</option>
             <option>分组2</option>
           </select>
-          <button type="button" className="btn btn-dash">
+          <button type="button" className="btn btn-circle p-1">
             刷新
           </button>
         </div>
