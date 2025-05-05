@@ -2,6 +2,7 @@ import { app, shell, BrowserWindow, ipcMain, webContents } from "electron";
 import { join } from "node:path";
 import { electronApp, optimizer, is } from "@electron-toolkit/utils";
 import icon from "../../resources/icon.png?asset";
+import { registerCookieHandles } from "./ipc/cookies";
 // import { Agent } from "./agent";
 // import { initialize, enable } from "@electron/remote/main";
 
@@ -63,40 +64,7 @@ app.whenReady().then(() => {
     optimizer.watchWindowShortcuts(window);
   });
 
-  // IPC test
-  ipcMain.on("ping", () => console.log("pong"));
-
-  ipcMain.handle("get-cookies", async (_, webContentsId: number) => {
-    try {
-      const contents = webContents.fromId(webContentsId);
-      if (!contents) {
-        return null;
-      }
-      const cookies = await contents.session.cookies.get({});
-
-      return {
-        cookies
-      };
-    } catch (error) {
-      console.error("Error accessing webContents or session:", error);
-      return null;
-    }
-  });
-
-  ipcMain.handle("set-cookie", async (_, webContentsId: number, cookieDetails) => {
-    try {
-      const contents = webContents.fromId(webContentsId);
-      if (!contents) {
-        return { success: false, error: "WebContents not found" };
-      }
-      for (const cookie of cookieDetails) {
-        await contents.session.cookies.set(cookie);
-      }
-      return { success: true };
-    } catch (error) {
-      return { success: false, error: `Error setting cookie: ${error}` };
-    }
-  });
+  registerCookieHandles();
 
   createWindow();
 

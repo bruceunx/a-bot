@@ -14,9 +14,6 @@ importers:
       '@electron-toolkit/utils':
         specifier: ^4.0.0
         version: 4.0.0(electron@34.2.0)
-      '@electron/remote':
-        specifier: ^2.1.2
-        version: 2.1.2(electron@34.2.0)
       electron-updater:
         specifier: ^6.3.9
         version: 6.3.9
@@ -211,11 +208,6 @@ packages:
     resolution: {integrity: sha512-f6596ZHpEq/YskUd8emYvOUne89ij8mQgjYFA5ru25QwbrRO+t1SImofdDv7kKOuWCmVOuU5tvfkbgGxIl3E/w==}
     engines: {node: '>=12.13.0'}
     hasBin: true
-
-  '@electron/remote@2.1.2':
-    resolution: {integrity: sha512-EPwNx+nhdrTBxyCqXt/pftoQg/ybtWDW3DUWHafejvnB1ZGGfMpv6e15D8KeempocjXe78T7WreyGGb3mlZxdA==}
-    peerDependencies:
-      electron: '>= 13.0.0'
 
   '@electron/universal@2.0.1':
     resolution: {integrity: sha512-fKpv9kg4SPmt+hY7SVBnIYULE9QJl8L3sCfcBsnqbJwwBwAeTLokJ9TRt9y7bK0JAzIW2y78TVVjvnQEms/yyA==}
@@ -2387,10 +2379,6 @@ snapshots:
     transitivePeerDependencies:
       - bluebird
       - supports-color
-
-  '@electron/remote@2.1.2(electron@34.2.0)':
-    dependencies:
-      electron: 34.2.0
 
   '@electron/universal@2.0.1':
     dependencies:
