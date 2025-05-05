@@ -18,7 +18,7 @@ export default function AccountMenu() {
             <option>分组1</option>
             <option>分组2</option>
           </select>
-          <button type="button" className="btn btn-circle p-1">
+          <button type="button" className="btn">
             刷新
           </button>
         </div>

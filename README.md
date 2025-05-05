@@ -6,6 +6,7 @@ An Electron application with React and TypeScript
 
 - [x] implement home view
 
-- [ ] improve manage part overview
-- [ ] improve layout of account
+- [x] improve manage part overview
+- [x] improve layout of account
+- [ ] implement webview tabs to show accounts in platform and status
 - [ ] improve layout of publish
