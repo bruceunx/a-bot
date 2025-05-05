@@ -1,20 +1,20 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import AccountMenu from "./AccountMenu";
 
 export default function Account() {
   const webviewRef = useRef<HTMLWebViewElement>(null);
 
-  const getCookies = async () => {
-    const webview = webviewRef.current;
+  const getCookies = useCallback(async () => {
+    const webview = webviewRef.current as Electron.WebviewTag | null;
     if (webview) {
       const id = webview.getWebContentsId();
-      const result = await window.api.getWebContentsWithSession(id);
+      const result = await window.api.getCookies(id);
 
       console.log("webcontent", result);
     } else {
       console.warn("WebContents not ready");
     }
-  };
+  }, []);
 
   useEffect(() => {
     if (webviewRef.current) {
@@ -24,7 +24,7 @@ export default function Account() {
         getCookies();
       });
     }
-  }, []);
+  }, [getCookies]);
 
   return (
     <section id="body" className="h-full grid  grid-cols-[auto_1fr]">

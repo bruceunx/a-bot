@@ -66,27 +66,35 @@ app.whenReady().then(() => {
   // IPC test
   ipcMain.on("ping", () => console.log("pong"));
 
-  ipcMain.handle("get-web-contents", async (_, webContentsId: number) => {
+  ipcMain.handle("get-cookies", async (_, webContentsId: number) => {
     try {
       const contents = webContents.fromId(webContentsId);
       if (!contents) {
         return null;
       }
+      const cookies = await contents.session.cookies.get({});
 
-      // Get the session associated with these webContents
-      const browserSession = contents.session;
-
-      // Create a "safe" wrapper for session methods
-      // This exposes only specific functionality we want to allow
       return {
-        id: contents.id,
-        url: contents.getURL(),
-        title: contents.getTitle(),
-        isLoading: contents.isLoading()
+        cookies
       };
     } catch (error) {
       console.error("Error accessing webContents or session:", error);
       return null;
+    }
+  });
+
+  ipcMain.handle("set-cookie", async (_, webContentsId: number, cookieDetails) => {
+    try {
+      const contents = webContents.fromId(webContentsId);
+      if (!contents) {
+        return { success: false, error: "WebContents not found" };
+      }
+      for (const cookie of cookieDetails) {
+        await contents.session.cookies.set(cookie);
+      }
+      return { success: true };
+    } catch (error) {
+      return { success: false, error: `Error setting cookie: ${error}` };
     }
   });
 
