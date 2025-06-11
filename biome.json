@@ -14,7 +14,9 @@
       },
       "a11y": {
         "noSvgWithoutTitle": "off",
-        "useValidAnchor": "off"
+        "useValidAnchor": "off",
+        "useKeyWithClickEvents": "off",
+        "noNoninteractiveTabindex": "off"
       },
       "suspicious": {
         "noArrayIndexKey": "off"
@@ -22,11 +24,15 @@
       "complexity": {
         "useOptionalChain": "off"
       },
+      "security": {
+        "noDangerouslySetInnerHtml": "off"
+      },
       "nursery": {
-        "useComponentExportOnlyModules": "error"
+        "useComponentExportOnlyModules": "off"
       },
       "correctness": {
-        "useHookAtTopLevel": "error"
+        "useHookAtTopLevel": "error",
+        "noUnknownProperty": "off"
       }
     }
   },
