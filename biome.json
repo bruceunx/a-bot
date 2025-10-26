@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.3.0/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -27,9 +27,6 @@
       "security": {
         "noDangerouslySetInnerHtml": "off"
       },
-      "nursery": {
-        "useComponentExportOnlyModules": "off"
-      },
       "correctness": {
         "useHookAtTopLevel": "error",
         "noUnknownProperty": "off"
@@ -37,7 +34,7 @@
     }
   },
   "files": {
-    "ignore": ["dist"]
+    "includes": ["src/**/*.{ts,tsx,js}"]
   },
   "formatter": {
     "enabled": true
