@@ -19,7 +19,8 @@
         "noNoninteractiveTabindex": "off"
       },
       "suspicious": {
-        "noArrayIndexKey": "off"
+        "noArrayIndexKey": "off",
+        "noTsIgnore": "off"
       },
       "complexity": {
         "useOptionalChain": "off"
