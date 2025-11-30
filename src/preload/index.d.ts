@@ -9,6 +9,9 @@ interface WebContentsAPI {
     webContentsId: number,
     cookieDetails: Cookie[]
   ) => Promise<{ success: boolean; error?: string }>;
+
+  saveCookies: (webContentsId: number) => Promise<number | null>;
+  loadCookies: (webContentsId: number) => Promise<number | null>;
 }
 
 declare global {

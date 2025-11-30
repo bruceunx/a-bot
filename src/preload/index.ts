@@ -6,7 +6,10 @@ import type { Cookie } from "../types/ipc";
 const api = {
   getCookies: (webContentsId: number) => ipcRenderer.invoke("get-cookies", webContentsId),
   setCookie: (webContentsId: number, cookieDetails: Cookie[]) =>
-    ipcRenderer.invoke("set-cookie", webContentsId, cookieDetails)
+    ipcRenderer.invoke("set-cookie", webContentsId, cookieDetails),
+
+  saveCookies: (webContentsId: number) => ipcRenderer.invoke("save-cookies", webContentsId),
+  loadCookies: (webContentsId: number) => ipcRenderer.invoke("load-cookies", webContentsId)
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to
