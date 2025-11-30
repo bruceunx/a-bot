@@ -1,6 +1,7 @@
-
 .PHONE: dev
 
+.DEFAULT_GOAL := dev
+
 dev:
-	@pnpm run  dev
+	@bun run dev
 
