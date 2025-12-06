@@ -1,44 +1,16 @@
-import { app, shell, BrowserWindow } from "electron";
-import { join } from "node:path";
-import { electronApp, optimizer, is } from "@electron-toolkit/utils";
-import icon from "../../resources/icon.png?asset";
+/**
+ * @module APP
+ * @description Implement the APP module
+ * @author bruce hu
+ * @version 0.1.0
+ */
+
+import { app, BrowserWindow } from "electron";
+import { electronApp, optimizer } from "@electron-toolkit/utils";
 import { registerCookieHandles } from "./ipc/cookies";
+import { createWindow } from "./window";
 // import { Agent } from "./agent";
 // import { initialize, enable } from "@electron/remote/main";
-
-function createWindow(): void {
-  const mainWindow = new BrowserWindow({
-    width: 900,
-    height: 670,
-
-    minWidth: 800,
-    minHeight: 600,
-
-    show: false,
-    autoHideMenuBar: true,
-    ...(process.platform === "linux" ? { icon } : {}),
-    webPreferences: {
-      preload: join(__dirname, "../preload/index.js"),
-      sandbox: false,
-      webviewTag: true
-    }
-  });
-
-  mainWindow.on("ready-to-show", () => {
-    mainWindow.show();
-  });
-
-  mainWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url);
-    return { action: "deny" };
-  });
-
-  if (is.dev && process.env.ELECTRON_RENDERER_URL) {
-    mainWindow.loadURL(process.env.ELECTRON_RENDERER_URL);
-  } else {
-    mainWindow.loadFile(join(__dirname, "../renderer/index.html"));
-  }
-}
 
 app.whenReady().then(() => {
   electronApp.setAppUserModelId("com.electron");
