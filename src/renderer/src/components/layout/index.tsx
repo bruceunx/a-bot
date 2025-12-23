@@ -1,13 +1,13 @@
 import { Outlet } from "react-router-dom";
-import Header from "./Header";
+import { Sidebar } from "./Sidebar";
 
 export default function Layout() {
-  return (
-    <div className="h-full overflow-hidden bg-base-300" data-theme="light">
-      <main className="h-screen grid  grid-rows-[auto_1fr]">
-        <Header />
-        <Outlet />
-      </main>
-    </div>
-  );
+	return (
+		<div className="h-full overflow-hidden bg-base-300" data-theme="light">
+			<main className="h-screen grid  grid-cols-[auto_1fr]">
+				<Sidebar />
+				<Outlet />
+			</main>
+		</div>
+	);
 }
