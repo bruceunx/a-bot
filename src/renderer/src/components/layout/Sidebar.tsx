@@ -7,7 +7,7 @@ export const Sidebar = () => {
 	const menuItems = [
 		{
 			id: "dashboard",
-			path: "/manage/dashboard",
+			path: "/dashboard",
 			icon: Icons.LayoutDashboard,
 			label: "Dashboard",
 		},
