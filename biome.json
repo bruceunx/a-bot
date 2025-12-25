@@ -16,7 +16,8 @@
         "noSvgWithoutTitle": "off",
         "useValidAnchor": "off",
         "useKeyWithClickEvents": "off",
-        "noNoninteractiveTabindex": "off"
+        "noNoninteractiveTabindex": "off",
+        "noStaticElementInteractions": "off"
       },
       "suspicious": {
         "noArrayIndexKey": "off",
