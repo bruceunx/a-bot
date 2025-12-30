@@ -51,4 +51,4 @@ export const generateMockAccounts = (count: number): SocialAccount[] => {
 	});
 };
 
-export const MOCK_ACCOUNTS = generateMockAccounts(52); // Generate 52 accounts
+export const MOCK_ACCOUNTS = generateMockAccounts(7); // Generate 52 accounts

@@ -141,7 +141,7 @@ export default function Publisher() {
 						<select
 							className="select select-sm select-bordered"
 							value={filterPlatform}
-							onChange={(e) => setFilterPlatform(e.target.value as any)}
+							onChange={(e) => setFilterPlatform(e.target.value as SocialPlatform)}
 						>
 							<option value="All">All Platforms</option>
 							<option value={SocialPlatform.XHS}>Xiaohongshu</option>
