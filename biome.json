@@ -17,6 +17,7 @@
         "useValidAnchor": "off",
         "useKeyWithClickEvents": "off",
         "noNoninteractiveTabindex": "off",
+        "useButtonType": "off",
         "noStaticElementInteractions": "off"
       },
       "suspicious": {
