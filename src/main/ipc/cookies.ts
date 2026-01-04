@@ -1,14 +1,19 @@
+import type { Cookie } from "electron";
 import { ipcMain, webContents, app } from "electron";
 import path from "node:path";
 import fs from "node:fs";
 
-function getUrlFromCookieDomain(cookie) {
-  const domain = cookie.domain.replace(/^\./, "");
-  return `https://${domain}`;
+function getUrlFromCookieDomain(cookie: Cookie): string {
+  const domain = cookie.domain?.startsWith(".")
+    ? cookie.domain.substring(1)
+    : cookie.domain;
+
+  const scheme = cookie.secure ? "https" : "http";
+  return `${scheme}://${domain}${cookie.path}`;
 }
 
 const cookiePath = path.join(app.getPath("userData"), "cookies.json");
-console.log(cookiePath);
+console.log("cookie storage path", cookiePath);
 
 export function registerCookieHandles() {
   ipcMain.handle("get-cookies", async (_, webContentsId: number) => {
@@ -20,7 +25,7 @@ export function registerCookieHandles() {
       const cookies = await contents.session.cookies.get({});
 
       return {
-        cookies
+        cookies,
       };
     } catch (error) {
       console.error("Error accessing webContents or session:", error);
@@ -28,50 +33,55 @@ export function registerCookieHandles() {
     }
   });
 
-  ipcMain.handle("set-cookie", async (_, webContentsId: number, cookieDetails) => {
-    try {
-      const contents = webContents.fromId(webContentsId);
-      if (!contents) {
-        return { success: false, error: "WebContents not found" };
+  ipcMain.handle(
+    "set-cookie",
+    async (_, webContentsId: number, cookieDetails) => {
+      try {
+        const contents = webContents.fromId(webContentsId);
+        if (!contents) {
+          return { success: false, error: "WebContents not found" };
+        }
+        for (const cookie of cookieDetails) {
+          await contents.session.cookies.set(cookie);
+        }
+        return { success: true };
+      } catch (error) {
+        return { success: false, error: `Error setting cookie: ${error}` };
       }
-      for (const cookie of cookieDetails) {
-        await contents.session.cookies.set(cookie);
-      }
-      return { success: true };
-    } catch (error) {
-      return { success: false, error: `Error setting cookie: ${error}` };
-    }
-  });
+    },
+  );
 
-  ipcMain.handle("save-cookies", async (_, webContentsId) => {
+  ipcMain.handle("save-cookies", async (_, webContentsId: number) => {
     const wc = webContents.fromId(webContentsId);
     if (!wc) return;
     const cookies = await wc.session.cookies.get({});
 
-    const filterCookies = cookies
-      .filter((cookie) => cookie.domain?.includes(".bilibili.com"))
-      .map((cookie) => ({
-        name: cookie.name,
-        value: cookie.value,
-        domain: ".bilibili.com",
-        path: cookie.path
-      }));
+    const filterCookies = cookies.filter((cookie) =>
+      cookie.domain?.includes(".bilibili.com"),
+    );
 
     fs.writeFileSync(cookiePath, JSON.stringify(filterCookies, null, 2));
     return cookies.length;
   });
 
-  ipcMain.handle("load-cookies", async (_, webContentsId) => {
+  ipcMain.handle("load-cookies", async (_, webContentsId: number) => {
     const wc = webContents.fromId(webContentsId);
     if (!wc) return;
     if (!fs.existsSync(cookiePath)) return;
 
-    const cookies = JSON.parse(fs.readFileSync(cookiePath, "utf8"));
+    const cookies: Cookie[] = JSON.parse(fs.readFileSync(cookiePath, "utf8"));
     for (const cookie of cookies) {
       try {
         const newCookie = {
-          ...cookie,
-          url: getUrlFromCookieDomain(cookie)
+          url: getUrlFromCookieDomain(cookie),
+          name: cookie.name,
+          value: cookie.value,
+          domain: cookie.domain,
+          path: cookie.path,
+          secure: cookie.secure,
+          httpOnly: cookie.httpOnly,
+          expirationDate: cookie.expirationDate, // Vital for persistent login
+          sameSite: cookie.sameSite,
         };
         console.log("new Cookie", newCookie);
         await wc.session.cookies.set(newCookie);
