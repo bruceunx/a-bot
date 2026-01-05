@@ -1,4 +1,4 @@
-import type { Platform } from "@renderer/constants/platforms";
+import { LOGIN_METADATA, type Platform } from "@renderer/constants/platforms";
 import type { Account } from "@renderer/types";
 
 import { useState, useEffect } from "react";
@@ -83,7 +83,7 @@ export function ConnectAccountModal({
               </h3>
               {selectedPlatform && (
                 <span className="text-[10px] opacity-50">
-                  Target: {selectedPlatform}
+                  Target: {LOGIN_METADATA[selectedPlatform].title}
                 </span>
               )}
             </div>
