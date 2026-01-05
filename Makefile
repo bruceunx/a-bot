@@ -1,6 +1,6 @@
 .PHONY: dev web
 
-.DEFAULT_GOAL := web
+.DEFAULT_GOAL := dev
 
 dev:
 	@bun run dev
