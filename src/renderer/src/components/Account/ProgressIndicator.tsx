@@ -17,11 +17,6 @@ export default function ProgressIndicator({ step }: ProgressIndicatorProps) {
           Interactive Login
         </li>
         <li
-          className={`step ${["verifying", "success"].includes(step) ? "step-primary" : ""}`}
-        >
-          Token Extraction
-        </li>
-        <li
           className={`step ${["success"].includes(step) ? "step-primary" : ""}`}
         >
           Ready
