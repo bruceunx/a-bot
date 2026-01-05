@@ -1,18 +1,9 @@
 import type { DidNavigateEvent, WebviewTag } from "electron";
 
-import { useRef, useEffect, useState } from "react";
-
-interface PageData {
-  title: string;
-  cookies: string;
-}
+import { useRef, useEffect } from "react";
 
 export default function WebviewBrowser() {
   const webviewRef = useRef<WebviewTag>(null);
-  const [pageData, setPageData] = useState<PageData>({
-    title: "",
-    cookies: "",
-  });
 
   useEffect(() => {
     const webview = webviewRef.current;
@@ -21,10 +12,6 @@ export default function WebviewBrowser() {
 
     const handleDomReady = async () => {
       try {
-        const title = await webview.executeJavaScript("document.title");
-
-        const cookies = await webview.executeJavaScript("document.cookie");
-
         const guestId = webview.getWebContentsId();
         // const saveCookieResult = await window.electron.ipcRenderer.invoke(
         //   "save-cookies",
@@ -36,14 +23,6 @@ export default function WebviewBrowser() {
           guestId,
         );
         console.log("loadCookieResult", loadCookieResult);
-
-        console.log("Page Loaded:", title);
-        console.log("Cookies Found:", cookies);
-
-        setPageData({
-          title: typeof title === "string" ? title : "Unknown",
-          cookies: typeof cookies === "string" ? cookies : "",
-        });
       } catch (error) {
         console.error("Failed to execute JS in webview:", error);
       }
@@ -76,21 +55,17 @@ export default function WebviewBrowser() {
     return () => {
       webview.removeEventListener("dom-ready", handleDomReady);
       webview.removeEventListener("did-navigate", handleNavigation);
+
+      webview.removeEventListener("did-attach", handleAttach);
     };
   }, []);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100vh" }}>
-      <div style={{ padding: "10px", background: "#f0f0f0" }}>
-        <strong>Detected Title:</strong> {pageData.title || "Loading..."} <br />
-        <strong>Detected Cookies:</strong>{" "}
-        {pageData.cookies || "None or HttpOnly"}
-      </div>
-
+    <div className="flex flex-col h-screen">
       <webview
         ref={webviewRef}
         src="https://creator.xiaohongshu.com"
-        style={{ flex: 1, border: "none" }}
+        className="flex-1 border-none"
       />
     </div>
   );
