@@ -1,15 +1,20 @@
 import type { WebviewTag } from "electron";
 import type { DidNavigateEvent } from "electron/renderer";
 import type { Platform } from "@renderer/constants/platforms";
+import type { Account } from "@renderer/types";
 
 import { useRef, useEffect, useState } from "react";
 import { LOGIN_METADATA } from "@renderer/constants/platforms";
 
 interface WebviewBrowserProps {
   platform: Platform;
+  onAuth: (account: Account) => void;
 }
 
-export default function WebviewBrowser({ platform }: WebviewBrowserProps) {
+export default function WebviewBrowser({
+  platform,
+  onAuth,
+}: WebviewBrowserProps) {
   const plaformMetadata = LOGIN_METADATA[platform];
 
   const webviewRef = useRef<WebviewTag>(null);
@@ -18,8 +23,22 @@ export default function WebviewBrowser({ platform }: WebviewBrowserProps) {
     const webview = webviewRef.current;
     if (!webview) return;
 
+    // const handleDomReady = async () => {
+    //   try {
+    //     const guestId = webview.getWebContentsId();
+    //     const loadCookieResult = await window.electron.ipcRenderer.invoke(
+    //       "load-cookies",
+    //       guestId,
+    //     );
+    //     console.log("loadCookieResult", loadCookieResult);
+    //   } catch (error) {
+    //     console.error("Failed to execute JS in webview:", error);
+    //   }
+    // };
+    //
+
     const checkAuthStatus = async () => {
-      const authResult = await webview.executeJavaScript(
+      const authResult: Account = await webview.executeJavaScript(
         plaformMetadata.script,
       );
 
@@ -31,6 +50,7 @@ export default function WebviewBrowser({ platform }: WebviewBrowserProps) {
           guestId,
         );
         console.log("saveCookieResult", saveCookieResult);
+        onAuth(authResult);
       }
     };
 
@@ -45,16 +65,20 @@ export default function WebviewBrowser({ platform }: WebviewBrowserProps) {
     };
 
     // webview.addEventListener("did-navigate", handleDidNavigate);
+    //
+    // webview.addEventListener("dom-ready", handleDomReady);
     webview.addEventListener("did-navigate-in-page", handleDidNavigateInPage);
 
     return () => {
       // webview.removeEventListener("did-navigate", handleDidNavigate);
+      //
+      // webview.removeEventListener("dom-ready", handleDomReady);
       webview.removeEventListener(
         "did-navigate-in-page",
         handleDidNavigateInPage,
       );
     };
-  }, [plaformMetadata]);
+  }, [plaformMetadata, onAuth]);
 
   return (
     <div className="flex flex-col h-screen">
