@@ -29,19 +29,11 @@ export default function SuccessLogin({
           You can start publishing immediately.
         </p>
       </div>
-      <div className="grid grid-cols-2 gap-3 w-full max-w-md">
-        <div className="bg-base-200 p-4 rounded-2xl border border-base-300 text-left">
-          <p className="text-[10px] font-bold opacity-40 uppercase">
-            Session Status
-          </p>
-          <p className="text-xs font-bold text-success">Active / Secure</p>
-        </div>
-      </div>
       <button
         onClick={onFinished}
         className="btn btn-primary btn-lg w-full max-w-sm shadow-2xl"
       >
-        Go to Dashboard
+        Finished
       </button>
     </div>
   );
