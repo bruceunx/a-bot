@@ -1,8 +1,15 @@
+import { LOGIN_METADATA, type Platform } from "@renderer/constants/platforms";
 import type { DidNavigateEvent, WebviewTag } from "electron";
 
 import { useRef, useEffect } from "react";
 
-export default function WebviewBrowser() {
+interface WebviewBrowserProps {
+  platform: Platform;
+}
+
+export default function WebviewBrowser({ platform }: WebviewBrowserProps) {
+  const plaformMetadata = LOGIN_METADATA[platform];
+
   const webviewRef = useRef<WebviewTag>(null);
 
   useEffect(() => {
@@ -64,7 +71,7 @@ export default function WebviewBrowser() {
     <div className="flex flex-col h-screen">
       <webview
         ref={webviewRef}
-        src="https://creator.xiaohongshu.com"
+        src={plaformMetadata.url}
         className="flex-1 border-none"
       />
     </div>
