@@ -1,7 +1,9 @@
-import { LOGIN_METADATA, type Platform } from "@renderer/constants/platforms";
-import type { DidNavigateEvent, WebviewTag } from "electron";
+import type { WebviewTag } from "electron";
+import type { DidNavigateEvent } from "electron/renderer";
+import type { Platform } from "@renderer/constants/platforms";
 
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
+import { LOGIN_METADATA } from "@renderer/constants/platforms";
 
 interface WebviewBrowserProps {
   platform: Platform;
@@ -11,61 +13,48 @@ export default function WebviewBrowser({ platform }: WebviewBrowserProps) {
   const plaformMetadata = LOGIN_METADATA[platform];
 
   const webviewRef = useRef<WebviewTag>(null);
-
+  const [partition] = useState(() => `private_${platform}_${Date.now()}`);
   useEffect(() => {
     const webview = webviewRef.current;
-
     if (!webview) return;
 
-    const handleDomReady = async () => {
-      try {
+    const checkAuthStatus = async () => {
+      const authResult = await webview.executeJavaScript(
+        plaformMetadata.script,
+      );
+
+      console.log("authResult", authResult);
+      if (authResult.name) {
         const guestId = webview.getWebContentsId();
-        // const saveCookieResult = await window.electron.ipcRenderer.invoke(
-        //   "save-cookies",
-        //   guestId,
-        // );
-        // console.log("saveCookieResult", saveCookieResult);
-        const loadCookieResult = await window.electron.ipcRenderer.invoke(
-          "load-cookies",
+        const saveCookieResult = await window.electron.ipcRenderer.invoke(
+          "save-cookies",
           guestId,
         );
-        console.log("loadCookieResult", loadCookieResult);
-      } catch (error) {
-        console.error("Failed to execute JS in webview:", error);
-      }
-    };
-    const handleAttach = async () => {
-      // Now it is safe to get the ID
-      const guestId = webview.getWebContentsId();
-      console.log("Webview attached with ID:", guestId);
-    };
-
-    webview.addEventListener("did-attach", handleAttach);
-
-    const handleNavigation = async (e: DidNavigateEvent) => {
-      const currentUrl = e.url;
-      console.log("Navigated to:", currentUrl);
-
-      // 2. Logic to detect successful login
-      // You can check the URL, or you can check if a specific cookie exists
-      if (currentUrl.includes("new/home")) {
-        console.log(currentUrl);
-        const cookies = await webview.executeJavaScript("document.cookie");
-        console.log("authenicate cookie", cookies);
+        console.log("saveCookieResult", saveCookieResult);
       }
     };
 
-    webview.addEventListener("dom-ready", handleDomReady);
+    // const handleDidNavigate = (e: DidNavigateEvent) => {
+    //   console.log("Full Navigate:", e.url);
+    //   setTimeout(checkAuthStatus, 2000);
+    // };
 
-    webview.addEventListener("did-navigate", handleNavigation);
+    const handleDidNavigateInPage = (e: DidNavigateEvent) => {
+      console.log("In-Page Navigate:", e.url);
+      setTimeout(checkAuthStatus, 2000);
+    };
+
+    // webview.addEventListener("did-navigate", handleDidNavigate);
+    webview.addEventListener("did-navigate-in-page", handleDidNavigateInPage);
 
     return () => {
-      webview.removeEventListener("dom-ready", handleDomReady);
-      webview.removeEventListener("did-navigate", handleNavigation);
-
-      webview.removeEventListener("did-attach", handleAttach);
+      // webview.removeEventListener("did-navigate", handleDidNavigate);
+      webview.removeEventListener(
+        "did-navigate-in-page",
+        handleDidNavigateInPage,
+      );
     };
-  }, []);
+  }, [plaformMetadata]);
 
   return (
     <div className="flex flex-col h-screen">
@@ -73,6 +62,7 @@ export default function WebviewBrowser({ platform }: WebviewBrowserProps) {
         ref={webviewRef}
         src={plaformMetadata.url}
         className="flex-1 border-none"
+        partition={partition}
       />
     </div>
   );
