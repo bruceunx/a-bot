@@ -171,7 +171,18 @@ export const LOGIN_METADATA: Record<Platform, PlatformMetadata> = {
           var name_element = document.getElementsByClassName('account-name')[0];
           var img_element = document.getElementsByClassName('avatar')[0];
           var img = img_element ? img_element.getElementsByTagName('img')[0] : null;
-          return { name: name_element ? name_element.textContent : '', avatar: img ? img.src : '' };
+          var accountId = '';
+          var infoContainer = document.getElementsByClassName('others description-text')[0];
+          if (infoContainer) {
+            var text = infoContainer.textContent;
+            for (var i = 0; i < text.length; i++) {
+              var charCode = text.charCodeAt(i);
+              if (charCode >= 48 && charCode <= 57) {
+                accountId += text[i];
+              }
+            }
+          }
+          return { accountId, name: name_element ? name_element.textContent : '', avatar: img ? img.src : ''};
       })();
     `,
     title: "小红书",
