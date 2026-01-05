@@ -6,12 +6,11 @@ import {
 
 // 4. Component Definition
 interface SelectPhaseProps {
-  onPlatformSelect?: (platform: Platform) => void;
+  onPlatformSelect: (platform: Platform) => void;
 }
 
 export default function SelectPhase({ onPlatformSelect }: SelectPhaseProps) {
   const handlePlatformSelect = (key: Platform) => {
-    console.log("Selected:", key);
     if (onPlatformSelect) {
       onPlatformSelect(key);
     }
