@@ -1,3 +1,14 @@
+import BiliIcon from "../assets/icons/bilibili.svg";
+import WxIcon from "../assets/icons/wx.svg";
+import DyIcon from "../assets/icons/dy.svg";
+import KsIcon from "../assets/icons/ks.svg";
+import TxwsIcon from "../assets/icons/txws.svg";
+import TtIcon from "../assets/icons/tt.svg";
+import XgIcon from "../assets/icons/xg.svg";
+import XhsIcon from "../assets/icons/xhs.svg";
+import ZhIcon from "../assets/icons/zh.svg";
+
+//
 // 1. Define the Enum for keys
 export enum Platform {
   BiliBili = "BiliBili",
@@ -42,7 +53,7 @@ export const LOGIN_METADATA: Record<Platform, PlatformMetadata> = {
       })();
     `,
     title: "哔哩哔哩",
-    icon: "assets/icons/bilibili.svg",
+    icon: BiliIcon,
     publish_url_image: "https://t.bilibili.com",
     publish_url_video:
       "https://member.bilibili.com/platform/upload/video/frame?page_from=creative_home_top_upload",
@@ -62,7 +73,7 @@ export const LOGIN_METADATA: Record<Platform, PlatformMetadata> = {
       })();
     `,
     title: "微信公众号",
-    icon: "assets/icons/wx.svg",
+    icon: WxIcon,
     publish_url_image: "https://mp.weixin.qq.com/",
     selector: "div.weui-desktop_name",
   },
@@ -79,7 +90,7 @@ export const LOGIN_METADATA: Record<Platform, PlatformMetadata> = {
       })();
     `,
     title: "抖音",
-    icon: "assets/icons/dy.svg",
+    icon: DyIcon,
     selector: "div.rNsML",
   },
   [Platform.KS]: {
@@ -96,7 +107,7 @@ export const LOGIN_METADATA: Record<Platform, PlatformMetadata> = {
       })();
     `,
     title: "快手视频",
-    icon: "assets/icons/ks.svg",
+    icon: KsIcon,
     selector: "div.info-top-name",
   },
   [Platform.TXWS]: {
@@ -113,7 +124,7 @@ export const LOGIN_METADATA: Record<Platform, PlatformMetadata> = {
       })();
     `,
     title: "腾讯微视",
-    icon: "assets/icons/txws.svg",
+    icon: TxwsIcon,
     selector: "div.icon.upload",
   },
   [Platform.TT]: {
@@ -129,7 +140,7 @@ export const LOGIN_METADATA: Record<Platform, PlatformMetadata> = {
       })();
     `,
     title: "头条",
-    icon: "assets/icons/tt.svg",
+    icon: TtIcon,
     selector: "img.auth-avator-img",
   },
   [Platform.XG]: {
@@ -146,7 +157,7 @@ export const LOGIN_METADATA: Record<Platform, PlatformMetadata> = {
       })();
     `,
     title: "西瓜视频",
-    icon: "assets/icons/xg.svg",
+    icon: XgIcon,
     publish_url_video: "https://studio.ixigua.com/upload?from=post_article",
     selector: "div.user-info__username",
   },
@@ -164,7 +175,7 @@ export const LOGIN_METADATA: Record<Platform, PlatformMetadata> = {
       })();
     `,
     title: "小红书",
-    icon: "assets/icons/xhs.svg",
+    icon: XhsIcon,
     publish_url_image: "https://creator.xiaohongshu.com/publish/publish",
     publish_url_video: "https://creator.xiaohongshu.com/publish/publish",
     selector: "div.account-name",
@@ -182,7 +193,7 @@ export const LOGIN_METADATA: Record<Platform, PlatformMetadata> = {
       })();
     `,
     title: "知乎",
-    icon: "assets/icons/zh.svg",
+    icon: ZhIcon,
     publish_url_image: "https://zhuanlan.zhihu.com/write",
     publish_url_video: "https://www.zhihu.com/zvideo/upload-video",
     selector: "div.LevelInfoV2-creatorInfo.css-sbvk4m",
