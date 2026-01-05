@@ -1,4 +1,5 @@
 import type { Platform } from "@renderer/constants/platforms";
+import type { Account } from "@renderer/types";
 
 import { useState, useEffect } from "react";
 import * as Icons from "../Icons";
@@ -48,6 +49,12 @@ export function ConnectAccountModal({
     setStep("webview");
     addLog(`Initializing sandboxed browser for ${p}...`);
     addLog(`Waiting for user login on ${p} official page...`);
+  };
+
+  const handleAuth = (account: Account) => {
+    console.log("auth account:", account);
+    setStep("success");
+    addLog(`${account} authenticated successfully`);
   };
 
   const handleFinish = () => {
@@ -106,7 +113,10 @@ export function ConnectAccountModal({
             ) : step === "webview" ? (
               <div className="flex-1 flex flex-col p-4 gap-4 animate-in slide-in-from-bottom-4 duration-300">
                 {selectedPlatform && (
-                  <WebviewBrowser platform={selectedPlatform} />
+                  <WebviewBrowser
+                    platform={selectedPlatform}
+                    onAuth={handleAuth}
+                  />
                 )}
                 <Logs logs={logs} />
               </div>
