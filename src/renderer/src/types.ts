@@ -48,7 +48,7 @@ export interface PublishingJob {
 }
 
 export type Account = {
-  name: string;
+  username: string;
   avatar: string;
   accountId: string;
 };

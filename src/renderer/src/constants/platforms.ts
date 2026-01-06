@@ -182,7 +182,7 @@ export const LOGIN_METADATA: Record<Platform, PlatformMetadata> = {
               }
             }
           }
-          return { accountId, name: name_element ? name_element.textContent : '', avatar: img ? img.src : ''};
+          return { accountId, username: name_element ? name_element.textContent : '', avatar: img ? img.src : ''};
       })();
     `,
     title: "小红书",

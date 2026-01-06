@@ -1,15 +1,16 @@
 import { contextBridge, ipcRenderer } from "electron";
 import { electronAPI } from "@electron-toolkit/preload";
-import type { Cookie } from "../types/ipc";
+import type { Account } from "../types/ipc";
 
 // Custom APIs for renderer
 const api = {
-  getCookies: (webContentsId: number) => ipcRenderer.invoke("get-cookies", webContentsId),
-  setCookie: (webContentsId: number, cookieDetails: Cookie[]) =>
-    ipcRenderer.invoke("set-cookie", webContentsId, cookieDetails),
+  getCookies: (webContentsId: number) =>
+    ipcRenderer.invoke("get-cookies", webContentsId),
 
-  saveCookies: (webContentsId: number) => ipcRenderer.invoke("save-cookies", webContentsId),
-  loadCookies: (webContentsId: number) => ipcRenderer.invoke("load-cookies", webContentsId)
+  saveAccount: (webContentsId: number, account: Account, platform: string) =>
+    ipcRenderer.invoke("save-account", webContentsId, account, platform),
+  loadCookies: (webContentsId: number) =>
+    ipcRenderer.invoke("load-cookies", webContentsId),
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to

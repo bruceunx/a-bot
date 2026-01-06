@@ -2,6 +2,13 @@ import type { Cookie } from "electron";
 import { ipcMain, webContents, app } from "electron";
 import path from "node:path";
 import fs from "node:fs";
+import { addAccount } from "../db";
+
+type Account = {
+  username: string;
+  avatar: string;
+  accountId: string;
+};
 
 function getUrlFromCookieDomain(cookie: Cookie): string {
   const domain = cookie.domain?.startsWith(".")
@@ -52,15 +59,28 @@ export function registerCookieHandles() {
     },
   );
 
-  ipcMain.handle("save-cookies", async (_, webContentsId: number) => {
-    const wc = webContents.fromId(webContentsId);
-    if (!wc) return;
-    const cookies = await wc.session.cookies.get({});
+  ipcMain.handle(
+    "save-account",
+    async (_, webContentsId: number, account: Account, platform: string) => {
+      const wc = webContents.fromId(webContentsId);
+      if (!wc) return;
+      const cookies = await wc.session.cookies.get({});
 
-    fs.writeFileSync(cookiePath, JSON.stringify(cookies, null, 2));
-    console.log("write to file", cookiePath, cookies);
-    return cookies.length;
-  });
+      try {
+        addAccount({
+          ...account,
+          cookies: cookies,
+          platform: platform,
+        });
+        console.log(
+          `[DB] Saved ${account.username} (${platform}) with ${cookies.length} cookies.`,
+        );
+        return { success: true, cookieCount: cookies.length };
+      } catch (_) {
+        return { success: false, cookieCount: 0 };
+      }
+    },
+  );
 
   ipcMain.handle("load-cookies", async (_, webContentsId: number) => {
     const wc = webContents.fromId(webContentsId);

@@ -43,11 +43,13 @@ export default function WebviewBrowser({
       );
 
       console.log("authResult", authResult);
-      if (authResult.name) {
+      if (authResult.accountId) {
         const guestId = webview.getWebContentsId();
         const saveCookieResult = await window.electron.ipcRenderer.invoke(
-          "save-cookies",
+          "save-account",
           guestId,
+          authResult,
+          plaformMetadata.prefix,
         );
         console.log("saveCookieResult", saveCookieResult);
         onAuth(authResult);
