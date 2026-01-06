@@ -13,6 +13,7 @@ function getUrlFromCookieDomain(cookie: Cookie): string {
 }
 
 const cookiePath = path.join(app.getPath("userData"), "cookies.json");
+const authCookiePath = path.join(app.getPath("userData"), "auth.json");
 console.log("cookie storage path", cookiePath);
 
 export function registerCookieHandles() {
@@ -56,11 +57,8 @@ export function registerCookieHandles() {
     if (!wc) return;
     const cookies = await wc.session.cookies.get({});
 
-    const filterCookies = cookies.filter((cookie) =>
-      cookie.domain?.includes(".bilibili.com"),
-    );
-
-    fs.writeFileSync(cookiePath, JSON.stringify(filterCookies, null, 2));
+    fs.writeFileSync(cookiePath, JSON.stringify(cookies, null, 2));
+    console.log("write to file", cookiePath, cookies);
     return cookies.length;
   });
 
@@ -69,7 +67,9 @@ export function registerCookieHandles() {
     if (!wc) return;
     if (!fs.existsSync(cookiePath)) return;
 
-    const cookies: Cookie[] = JSON.parse(fs.readFileSync(cookiePath, "utf8"));
+    const cookies: Cookie[] = JSON.parse(
+      fs.readFileSync(authCookiePath, "utf8"),
+    );
     for (const cookie of cookies) {
       try {
         const newCookie = {
