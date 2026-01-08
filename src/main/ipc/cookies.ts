@@ -1,8 +1,6 @@
 import type { Cookie } from "electron";
-import { ipcMain, webContents, app } from "electron";
-import path from "node:path";
-import fs from "node:fs";
-import { addAccount } from "../db";
+import { ipcMain, webContents } from "electron";
+import { addAccount, getAccounts } from "../db";
 
 type Account = {
   username: string;
@@ -18,10 +16,6 @@ function getUrlFromCookieDomain(cookie: Cookie): string {
   const scheme = cookie.secure ? "https" : "http";
   return `${scheme}://${domain}${cookie.path}`;
 }
-
-const cookiePath = path.join(app.getPath("userData"), "cookies.json");
-const authCookiePath = path.join(app.getPath("userData"), "auth.json");
-console.log("cookie storage path", cookiePath);
 
 export function registerCookieHandles() {
   ipcMain.handle("get-cookies", async (_, webContentsId: number) => {
@@ -82,14 +76,23 @@ export function registerCookieHandles() {
     },
   );
 
+  ipcMain.handle("get-accounts", async (_) => {
+    try {
+      const accounts = getAccounts();
+      return {
+        accounts,
+      };
+    } catch (error) {
+      console.error("Failed to get accounts", error);
+      return null;
+    }
+  });
+
   ipcMain.handle("load-cookies", async (_, webContentsId: number) => {
     const wc = webContents.fromId(webContentsId);
     if (!wc) return;
-    if (!fs.existsSync(cookiePath)) return;
 
-    const cookies: Cookie[] = JSON.parse(
-      fs.readFileSync(authCookiePath, "utf8"),
-    );
+    const cookies: Cookie[] = [];
     for (const cookie of cookies) {
       try {
         const newCookie = {

@@ -56,10 +56,10 @@ export function addAccount(account: Account) {
   return stmt.run({ ...account, cookies: JSON.stringify(account.cookies) });
 }
 
-export function getActiveAccounts() {
+export function getAccounts() {
   if (!db) throw new Error("Database not initialized");
 
-  const stmt = db.prepare("SELECT * FROM accounts WHERE status = 'active'");
+  const stmt = db.prepare("SELECT * FROM accounts");
   const rows = stmt.all() as AccountRow[];
 
   return rows.map((row) => ({

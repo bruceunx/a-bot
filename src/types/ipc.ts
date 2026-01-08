@@ -8,3 +8,9 @@ export type Account = {
   cookies: Cookie[];
   platform: string;
 };
+
+export type RawAccount = {
+  username: string;
+  avatar: string;
+  accountId: string;
+};

@@ -1,5 +1,5 @@
 import type { ElectronAPI } from "@electron-toolkit/preload";
-import type { Account, Cookie } from "../types/ipc";
+import type { RawAccount, Cookie, Account } from "../types/ipc";
 
 interface WebContentsAPI {
   getCookies: (webContentsId: number) => Promise<{
@@ -8,9 +8,12 @@ interface WebContentsAPI {
 
   saveAccount: (
     webContentsId: number,
-    account: Account,
+    account: RawAccount,
     platform: string,
   ) => Promise<number | null>;
+
+  getAccounts: () => Promise<Account[] | null>;
+
   loadCookies: (webContentsId: number) => Promise<number | null>;
 }
 

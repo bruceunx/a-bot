@@ -1,10 +1,11 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { MOCK_ACCOUNTS } from "../../data";
-import { SocialPlatform, AccountStatus } from "../../types";
+import { SocialPlatform, type AccountType } from "../../types";
 import * as Icons from "../Icons";
 import { ConnectAccountModal } from "./ConnectAccountModal";
 
 export default function Account() {
+  const [accounts, setAccounts] = useState<AccountType[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedGroup, setSelectedGroup] = useState<string>("All");
   const [isConnectModalOpen, setIsConnectModalOpen] = useState(false);
@@ -24,6 +25,19 @@ export default function Account() {
       return matchesSearch && matchesGroup;
     });
   }, [searchTerm, selectedGroup]);
+
+  useEffect(() => {
+    const initAccounts = async () => {
+      const _accounts =
+        await window.electron.ipcRenderer.invoke("get-accounts");
+      if (_accounts.accounts) {
+        setAccounts(_accounts.accounts);
+      }
+    };
+    initAccounts();
+  }, []);
+
+  console.log("accounts", accounts);
 
   return (
     <div className="p-8 h-full flex flex-col animate-in fade-in duration-500 overflow-hidden">
@@ -81,7 +95,7 @@ export default function Account() {
       {/* Grid */}
       <div className="flex-1 overflow-y-auto custom-scrollbar pb-10">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {filteredAccounts.map((account) => (
+          {accounts.map((account) => (
             <div
               key={account.id}
               className="card bg-base-100 border border-base-300 shadow-md hover:shadow-xl transition-all group overflow-hidden"
@@ -89,46 +103,22 @@ export default function Account() {
               <div className="card-body p-5">
                 <div className="flex justify-between items-start mb-2">
                   <div className="flex items-center gap-3">
-                    <div className="avatar">
-                      <div
-                        className={`w-12 h-12 rounded-xl ${account.avatarColor} text-white flex items-center justify-center font-bold text-xl ring ring-base-100 ring-offset-base-100`}
-                      >
-                        {account.name[0]}
-                      </div>
+                    <div className="avatar w-9">
+                      <img src={account.avatar} alt={account.username} />
                     </div>
                     <div>
                       <h3 className="text-sm font-bold truncate w-32">
-                        {account.name}
+                        {account.username}
                       </h3>
-                      <p className="text-xs opacity-50">{account.handle}</p>
                     </div>
                   </div>
                   <div
                     className={`badge badge-xs ${
-                      account.status === AccountStatus.CONNECTED
+                      account.status
                         ? "badge-success"
                         : "badge-error animate-pulse"
                     }`}
                   />
-                </div>
-
-                <div className="grid grid-cols-2 gap-2 my-4">
-                  <div className="bg-base-200 rounded-lg p-2 text-center border border-base-300/50">
-                    <p className="text-[10px] uppercase opacity-40 font-bold">
-                      Followers
-                    </p>
-                    <p className="text-xs font-mono font-bold">
-                      {(account.followers / 1000).toFixed(1)}k
-                    </p>
-                  </div>
-                  <div className="bg-base-200 rounded-lg p-2 text-center border border-base-300/50">
-                    <p className="text-[10px] uppercase opacity-40 font-bold">
-                      Posts
-                    </p>
-                    <p className="text-xs font-mono font-bold">
-                      {account.postsCount}
-                    </p>
-                  </div>
                 </div>
 
                 <div className="card-actions justify-between items-center border-t border-base-200 pt-3">
@@ -139,7 +129,7 @@ export default function Account() {
                       <Icons.TikTokLogo className="w-4 h-4 text-tiktok" />
                     )}
                     <span className="badge badge-sm badge-ghost text-[10px]">
-                      {account.group}
+                      group
                     </span>
                   </div>
 
