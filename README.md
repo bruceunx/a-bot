@@ -9,4 +9,5 @@ An Electron application with React and TypeScript
   - [ ] modify dashboard page
   - [ ] add Ai page
 
-- [ ] implement database connection
+- [x] implement database connection
+- [x] implement group to handle many to many relationship
