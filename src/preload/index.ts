@@ -4,18 +4,24 @@ import type { UIParseAccount } from "@common/types";
 
 // Custom APIs for renderer
 const api = {
+  // cookies
   getCookies: (webContentsId: number) =>
     ipcRenderer.invoke("get-cookies", webContentsId),
+  loadCookies: (webContentsId: number) =>
+    ipcRenderer.invoke("load-cookies", webContentsId),
 
+  // accounts
   saveAccount: (
     webContentsId: number,
     account: UIParseAccount,
     platform: string,
   ) => ipcRenderer.invoke("save-account", webContentsId, account, platform),
   getAccounts: () => ipcRenderer.invoke("get-accounts"),
+
+  // groups
   getGroups: () => ipcRenderer.invoke("get-groups"),
-  loadCookies: (webContentsId: number) =>
-    ipcRenderer.invoke("load-cookies", webContentsId),
+  createGroup: (name: string) => ipcRenderer.invoke("create-group", name),
+  deleteGroup: (id: number) => ipcRenderer.invoke("delete-group", id),
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to
