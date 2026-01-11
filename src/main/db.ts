@@ -53,7 +53,7 @@ export function initDatabase() {
   const createGroupsTable = `
     CREATE TABLE IF NOT EXISTS groups (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
-      name TEXT NOT NULL UNIQUE,
+      name TEXT NOT NULL UNIQUE
     );
   `;
 
@@ -72,7 +72,7 @@ export function initDatabase() {
     db.exec(createTableQuery);
     db.exec(createGroupsTable);
     db.exec(createAccountGroupsTable);
-  });
+  })();
   console.log(`Database initialized at: ${dbPath}`);
 }
 
