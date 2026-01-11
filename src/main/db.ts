@@ -1,5 +1,5 @@
-import type { Account, Group } from "@common/types";
-import type { AccountRow } from "./types";
+import type { Group } from "@common/types";
+import type { AccountRow, Account } from "./types";
 
 import Database from "better-sqlite3";
 import { app } from "electron";

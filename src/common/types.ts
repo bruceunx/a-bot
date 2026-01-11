@@ -9,22 +9,12 @@ export type UIParseAccount = {
 };
 
 // Share backend type to UI
-export type Account = {
-  id?: number;
-  accountId: string;
-  username: string;
-  avatar: string;
-  cookies: Cookie[];
-  platform: string;
-};
-
-export interface Group {
+export type Group = {
   id: number;
   name: string;
-}
+};
 
-export interface AccountWithGroups
-  extends Omit<AccountRow, "cookies" | "groups_json"> {
+export type AccountWithGroups = Omit<AccountRow, "cookies" | "groups_json"> & {
   cookies: Cookie[];
   groups: Group[];
-}
+};
