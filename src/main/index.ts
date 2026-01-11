@@ -10,6 +10,7 @@ import { electronApp, optimizer } from "@electron-toolkit/utils";
 import { registerCookieHandles } from "./ipc/cookies";
 import { createWindow } from "./window";
 import { initDatabase } from "./db";
+import { registerGroupsHandles } from "./ipc/groups";
 // import { Agent } from "./agent";
 // import { initialize, enable } from "@electron/remote/main";
 
@@ -22,6 +23,7 @@ app.whenReady().then(() => {
   });
 
   registerCookieHandles();
+  registerGroupsHandles();
 
   createWindow();
 

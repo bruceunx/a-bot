@@ -80,9 +80,7 @@ export function registerCookieHandles() {
   ipcMain.handle("get-accounts", async (_) => {
     try {
       const accounts = getAccounts();
-      return {
-        accounts,
-      };
+      return accounts;
     } catch (error) {
       console.error("Failed to get accounts", error);
       return null;

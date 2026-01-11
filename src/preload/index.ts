@@ -13,6 +13,7 @@ const api = {
     platform: string,
   ) => ipcRenderer.invoke("save-account", webContentsId, account, platform),
   getAccounts: () => ipcRenderer.invoke("get-accounts"),
+  getGroups: () => ipcRenderer.invoke("get-groups"),
   loadCookies: (webContentsId: number) =>
     ipcRenderer.invoke("load-cookies", webContentsId),
 };
