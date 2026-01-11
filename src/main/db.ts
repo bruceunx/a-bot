@@ -1,32 +1,9 @@
-import type { Account } from "../types/ipc";
-import type { Cookie } from "electron";
+import type { Account, Group } from "@common/types";
+import type { AccountRow } from "./types";
 
 import Database from "better-sqlite3";
 import { app } from "electron";
 import path from "node:path";
-
-interface AccountRow {
-  id: number;
-  accountId: string;
-  username: string;
-  platform: string;
-  cookies: string;
-  userAgent: string;
-  status: string;
-  groups_json?: string;
-  created_at: string;
-}
-
-export interface Group {
-  id: number;
-  name: string;
-}
-
-export interface AccountWithGroups
-  extends Omit<AccountRow, "cookies" | "groups_json"> {
-  cookies: Cookie[];
-  groups: Group[];
-}
 
 let db: Database.Database | null = null;
 

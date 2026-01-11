@@ -1,5 +1,3 @@
-import type { Cookie } from "electron";
-
 export type DataViewItem = {
   label: string;
   value: number;
@@ -53,14 +51,4 @@ export type RawAccount = {
   username: string;
   avatar: string;
   accountId: string;
-};
-
-export type AccountType = {
-  id: number;
-  accountId: string;
-  username: string;
-  avatar: string;
-  cookies: Cookie[];
-  platform: string;
-  status: boolean;
 };

@@ -1,14 +1,14 @@
 import type { WebviewTag } from "electron";
 import type { DidNavigateEvent } from "electron/renderer";
 import type { Platform } from "@renderer/constants/platforms";
-import type { RawAccount } from "@renderer/types";
+import type { UIParseAccount } from "@common/types";
 
 import { useRef, useEffect, useState } from "react";
 import { LOGIN_METADATA } from "@renderer/constants/platforms";
 
 interface WebviewBrowserProps {
   platform: Platform;
-  onAuth: (account: RawAccount) => void;
+  onAuth: (account: UIParseAccount) => void;
 }
 
 export default function WebviewBrowser({
@@ -38,7 +38,7 @@ export default function WebviewBrowser({
     //
 
     const checkAuthStatus = async () => {
-      const authResult: RawAccount = await webview.executeJavaScript(
+      const authResult: UIParseAccount = await webview.executeJavaScript(
         plaformMetadata.script,
       );
 

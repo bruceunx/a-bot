@@ -1,5 +1,14 @@
 import type { Cookie } from "electron";
+import type { AccountRow } from "../main/types";
 
+// Share UI type to backend
+export type UIParseAccount = {
+  username: string;
+  avatar: string;
+  accountId: string;
+};
+
+// Share backend type to UI
 export type Account = {
   id?: number;
   accountId: string;
@@ -9,8 +18,13 @@ export type Account = {
   platform: string;
 };
 
-export type RawAccount = {
-  username: string;
-  avatar: string;
-  accountId: string;
-};
+export interface Group {
+  id: number;
+  name: string;
+}
+
+export interface AccountWithGroups
+  extends Omit<AccountRow, "cookies" | "groups_json"> {
+  cookies: Cookie[];
+  groups: Group[];
+}

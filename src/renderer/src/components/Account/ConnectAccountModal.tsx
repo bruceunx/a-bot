@@ -1,5 +1,5 @@
+import type { UIParseAccount } from "@common/types";
 import { LOGIN_METADATA, type Platform } from "@renderer/constants/platforms";
-import type { Account } from "@renderer/types";
 
 import { useState, useEffect } from "react";
 import * as Icons from "../Icons";
@@ -51,7 +51,7 @@ export function ConnectAccountModal({
     addLog(`Waiting for user login on ${p} official page...`);
   };
 
-  const handleAuth = (account: Account) => {
+  const handleAuth = (account: UIParseAccount) => {
     console.log("auth account:", account);
     setStep("success");
     addLog(`${account} authenticated successfully`);

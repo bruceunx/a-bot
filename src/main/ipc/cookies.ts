@@ -1,12 +1,8 @@
 import type { Cookie } from "electron";
+import type { UIParseAccount } from "@common/types";
+
 import { ipcMain, webContents } from "electron";
 import { addAccount, getAccounts } from "../db";
-
-type Account = {
-  username: string;
-  avatar: string;
-  accountId: string;
-};
 
 function getUrlFromCookieDomain(cookie: Cookie): string {
   const domain = cookie.domain?.startsWith(".")
@@ -55,7 +51,12 @@ export function registerCookieHandles() {
 
   ipcMain.handle(
     "save-account",
-    async (_, webContentsId: number, account: Account, platform: string) => {
+    async (
+      _,
+      webContentsId: number,
+      account: UIParseAccount,
+      platform: string,
+    ) => {
       const wc = webContents.fromId(webContentsId);
       if (!wc) return;
       const cookies = await wc.session.cookies.get({});

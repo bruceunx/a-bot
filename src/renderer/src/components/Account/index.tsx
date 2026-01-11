@@ -1,11 +1,12 @@
 import { useState, useMemo, useEffect } from "react";
 import { MOCK_ACCOUNTS } from "../../data";
-import { SocialPlatform, type AccountType } from "../../types";
+import { SocialPlatform } from "../../types";
 import * as Icons from "../Icons";
 import { ConnectAccountModal } from "./ConnectAccountModal";
+import type { AccountWithGroups } from "@common/types";
 
 export default function Account() {
-  const [accounts, setAccounts] = useState<AccountType[]>([]);
+  const [accounts, setAccounts] = useState<AccountWithGroups[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedGroup, setSelectedGroup] = useState<string>("All");
   const [isConnectModalOpen, setIsConnectModalOpen] = useState(false);
@@ -14,17 +15,6 @@ export default function Account() {
     const g = new Set(MOCK_ACCOUNTS.map((a) => a.group || "Ungrouped"));
     return ["All", ...Array.from(g)];
   }, []);
-
-  const filteredAccounts = useMemo(() => {
-    return MOCK_ACCOUNTS.filter((acc) => {
-      const matchesSearch =
-        acc.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        acc.handle.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesGroup =
-        selectedGroup === "All" || acc.group === selectedGroup;
-      return matchesSearch && matchesGroup;
-    });
-  }, [searchTerm, selectedGroup]);
 
   useEffect(() => {
     const initAccounts = async () => {
