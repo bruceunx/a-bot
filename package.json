@@ -9,8 +9,8 @@
   "scripts": {
     "format": "biome --write .",
     "lint": "biome lint .",
-    "typecheck:node": "tsc --noEmit -p tsconfig.node.json --composite false",
-    "typecheck:web": "tsc --noEmit -p tsconfig.web.json --composite false",
+    "typecheck:node": "tsgo --noEmit -p tsconfig.node.json --composite false",
+    "typecheck:web": "tsgo --noEmit -p tsconfig.web.json --composite false",
     "typecheck": "npm run typecheck:node && npm run typecheck:web",
     "start": "electron-vite preview",
     "dev": "electron-vite dev",
@@ -39,6 +39,7 @@
     "@types/node": "^22.13.4",
     "@types/react": "^18.3.18",
     "@types/react-dom": "^18.3.5",
+    "@typescript/native-preview": "^7.0.0-dev.20260109.1",
     "@vitejs/plugin-react": "^4.3.4",
     "daisyui": "5.0.9",
     "electron": "^34.2.0",
