@@ -1,7 +1,12 @@
 import type { UIParseAccount } from "@common/types";
 
 import { ipcMain, webContents } from "electron";
-import { addAccount, getAccounts } from "../db";
+import {
+  addAccount,
+  addAccountToGroup,
+  getAccounts,
+  removeAccountFromGroup,
+} from "../db";
 
 export function registerAccountsHandles() {
   ipcMain.handle(
@@ -41,4 +46,30 @@ export function registerAccountsHandles() {
       return null;
     }
   });
+
+  ipcMain.handle(
+    "add-account-to-group",
+    async (_, accountId: number, groupId: number) => {
+      try {
+        const result = addAccountToGroup(accountId, groupId);
+        return result.lastInsertRowid;
+      } catch (error) {
+        console.error("Failed to add account to group", error);
+        return null;
+      }
+    },
+  );
+
+  ipcMain.handle(
+    "remove-account-from-group",
+    async (_, accountId: number, groupId: number) => {
+      try {
+        const result = removeAccountFromGroup(accountId, groupId);
+        return result.changes;
+      } catch (error) {
+        console.error("Failed to add account to group", error);
+        return null;
+      }
+    },
+  );
 }

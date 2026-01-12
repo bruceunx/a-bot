@@ -124,3 +124,25 @@ export function deleteGroup(id: number) {
   const stmt = db.prepare(`DELETE FROM groups WHERE id = ?`);
   return stmt.run(id);
 }
+
+export function addAccountToGroup(accountId: number, groupId: number) {
+  if (!db) throw new Error("Database not initialized");
+
+  const stmt = db.prepare(`
+    INSERT OR IGNORE INTO account_groups (account_id, group_id)
+    VALUES (@accountId, @groupId)
+  `);
+
+  return stmt.run({ accountId, groupId });
+}
+
+export function removeAccountFromGroup(accountId: number, groupId: number) {
+  if (!db) throw new Error("Database not initialized");
+
+  const stmt = db.prepare(`
+    DELETE FROM account_groups
+    WHERE account_id = @accountId AND group_id = @groupId
+  `);
+
+  return stmt.run({ accountId, groupId });
+}
