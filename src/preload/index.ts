@@ -18,6 +18,11 @@ const api = {
   ) => ipcRenderer.invoke("save-account", webContentsId, account, platform),
   getAccounts: () => ipcRenderer.invoke("get-accounts"),
 
+  addAccountToGroup: (accountId: number, groupId: number) =>
+    ipcRenderer.invoke("add-account-to-group", accountId, groupId),
+  removeAccountFromGroup: (accountId: number, groupId: number) =>
+    ipcRenderer.invoke("remove-account-from-group", accountId, groupId),
+
   // groups
   getGroups: () => ipcRenderer.invoke("get-groups"),
   createGroup: (name: string) => ipcRenderer.invoke("create-group", name),

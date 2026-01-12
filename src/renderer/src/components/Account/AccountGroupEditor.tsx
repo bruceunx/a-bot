@@ -6,7 +6,7 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   onToggleGroup: (
-    accountId: string,
+    accountId: number,
     groupId: number,
     isAdding: boolean,
   ) => void;
@@ -49,7 +49,7 @@ export function AccountGroupEditor({
                   className="checkbox checkbox-sm checkbox-primary"
                   checked={active}
                   onChange={(e) =>
-                    onToggleGroup(account.accountId, group.id, e.target.checked)
+                    onToggleGroup(account.id, group.id, e.target.checked)
                   }
                 />
               </label>

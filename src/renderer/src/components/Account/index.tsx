@@ -74,20 +74,24 @@ export default function Account() {
   };
 
   const handleToggleAccountGroup = async (
-    accountId: string,
+    accountId: number,
     groupId: number,
     isAdding: boolean,
   ) => {
     if (isAdding) {
-      await window.electron.ipcRenderer.invoke(IPC.ADD_ACC_TO_GROUP, {
+      const result = await window.electron.ipcRenderer.invoke(
+        IPC.ADD_ACC_TO_GROUP,
         accountId,
         groupId,
-      });
+      );
+      console.log("add to group result", result);
     } else {
-      await window.electron.ipcRenderer.invoke(IPC.REMOVE_ACC_FROM_GROUP, {
+      const result = await window.electron.ipcRenderer.invoke(
+        IPC.REMOVE_ACC_FROM_GROUP,
         accountId,
         groupId,
-      });
+      );
+      console.log("remove from group result", result);
     }
     refreshData();
     // Optimization: You could optimistically update local state here instead of full refresh

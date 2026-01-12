@@ -16,6 +16,14 @@ interface WebContentsAPI {
     platform: string,
   ) => Promise<number | null>;
   getAccounts: () => Promise<AccountWithGroups[] | null>;
+  addAccountToGroup: (
+    accountId: number,
+    groupId: number,
+  ) => Promise<number | null>;
+  removeAccountFromGroup: (
+    accountId: number,
+    groupId: number,
+  ) => Promise<number | null>;
 
   // groups
   getGroups: () => Promise<Group[] | null>;
