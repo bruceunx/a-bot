@@ -1,4 +1,5 @@
 import type { AccountWithGroups, Group } from "@common/types";
+import { useEffect, useState } from "react";
 
 interface Props {
   account: AccountWithGroups | null;
@@ -19,11 +20,36 @@ export function AccountGroupEditor({
   onClose,
   onToggleGroup,
 }: Props) {
+  const [selectedGroupIds, setSelectedGroupIds] = useState<Set<number>>(
+    new Set(),
+  );
+
+  // 2. Sync local state whenever the 'account' prop changes or modal opens
+  useEffect(() => {
+    if (account && account.groups) {
+      const groupIds = new Set(account.groups.map((g) => g.id));
+      setSelectedGroupIds(groupIds);
+    }
+  }, [account]);
+
   if (!isOpen || !account) return null;
 
-  // Helper to check if account is currently in a group
-  const isInGroup = (groupId: number) =>
-    account.groups.some((g) => g.id === groupId);
+  // 3. Handle local toggle logic
+  const handleCheckboxChange = (groupId: number, isChecked: boolean) => {
+    // Update UI immediately (Optimistic update)
+    setSelectedGroupIds((prev) => {
+      const next = new Set(prev);
+      if (isChecked) {
+        next.add(groupId);
+      } else {
+        next.delete(groupId);
+      }
+      return next;
+    });
+
+    // Notify parent to perform API call/State update
+    onToggleGroup(account.id, groupId, isChecked);
+  };
 
   return (
     <div className="modal modal-open">
@@ -37,7 +63,7 @@ export function AccountGroupEditor({
 
         <div className="grid grid-cols-2 gap-2">
           {allGroups.map((group) => {
-            const active = isInGroup(group.id);
+            const active = selectedGroupIds.has(group.id);
             return (
               <label
                 key={group.id}
@@ -48,9 +74,9 @@ export function AccountGroupEditor({
                   type="checkbox"
                   className="checkbox checkbox-sm checkbox-primary"
                   checked={active}
-                  onChange={(e) =>
-                    onToggleGroup(account.id, group.id, e.target.checked)
-                  }
+                  onChange={(e) => {
+                    handleCheckboxChange(group.id, e.target.checked);
+                  }}
                 />
               </label>
             );
