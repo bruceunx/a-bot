@@ -6,7 +6,9 @@ import {
   addAccountToGroup,
   getAccounts,
   removeAccountFromGroup,
+  updateAccountStatus,
 } from "../db";
+import { checkAccountHealth } from "../server/checkState";
 
 export function registerAccountsHandles() {
   ipcMain.handle(
@@ -72,4 +74,18 @@ export function registerAccountsHandles() {
       }
     },
   );
+
+  ipcMain.handle("check-account-health", async (_) => {
+    const accounts = getAccounts();
+
+    for (const account of accounts) {
+      console.log(`Checking ${account.platform} account ${account.id}...`);
+      const isActive = await checkAccountHealth(
+        account.platform,
+        account.cookies,
+      );
+      console.log(`Result: ${isActive ? "Active" : "Expired"}`);
+      updateAccountStatus(account.id, isActive ? 1 : 0);
+    }
+  });
 }

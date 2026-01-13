@@ -22,7 +22,7 @@ export function initDatabase() {
       avatar TEXT,
       platform TEXT, -- e.g., 'facebook', 'twitter'
       cookies TEXT NOT NULL, -- Stored as JSON string
-      status TEXT DEFAULT 'active', -- 'active', 'suspended', 'expired'
+      status INTEGER DEFAULT 1,
       created_at DATETIME DEFAULT CURRENT_TIMESTAMP
     );
   `;
@@ -102,6 +102,18 @@ export function getAccounts() {
       groups,
     };
   });
+}
+
+export function updateAccountStatus(id: number, status: number) {
+  if (!db) throw new Error("Database not initialized");
+
+  const stmt = db.prepare(`
+    UPDATE accounts
+    SET status = @status
+    WHERE id = @id
+  `);
+
+  return stmt.run({ id, status });
 }
 
 export function createGroup(name: string) {

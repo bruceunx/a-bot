@@ -8,7 +8,7 @@ export type AccountRow = {
   platform: string;
   cookies: string;
   userAgent: string;
-  status: string;
+  status: number;
   groups_json?: string;
   created_at: string;
 };

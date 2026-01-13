@@ -241,9 +241,7 @@ export default function Account() {
                   </div>
                   <div
                     className={`badge badge-xs ${
-                      account.status === "active"
-                        ? "badge-success"
-                        : "badge-error"
+                      account.status ? "badge-success" : "badge-error"
                     }`}
                   />
                 </div>
