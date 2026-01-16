@@ -10,7 +10,8 @@ let db: Database.Database | null = null;
 export function initDatabase() {
   const dbPath = path.join(app.getPath("userData"), "inner.db");
 
-  db = new Database(dbPath, { verbose: console.log });
+  // db = new Database(dbPath, { verbose: console.log });
+  db = new Database(dbPath);
   db.pragma("journal_mode = WAL");
   db.pragma("foreign_keys = ON");
 

@@ -23,6 +23,7 @@ const api = {
   removeAccountFromGroup: (accountId: number, groupId: number) =>
     ipcRenderer.invoke("remove-account-from-group", accountId, groupId),
 
+  checkAllAccounts: () => ipcRenderer.invoke("check-account-health"),
   // groups
   getGroups: () => ipcRenderer.invoke("get-groups"),
   createGroup: (name: string) => ipcRenderer.invoke("create-group", name),

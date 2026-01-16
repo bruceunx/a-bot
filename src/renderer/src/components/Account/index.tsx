@@ -5,7 +5,7 @@ import * as Icons from "../Icons";
 import { ConnectAccountModal } from "./ConnectAccountModal";
 import { GroupManagerModal } from "./GroupManagerModal"; // Import new component
 import { AccountGroupEditor } from "./AccountGroupEditor"; // Import new component
-import { Edit, Trash2 } from "lucide-react";
+import { Edit, Trash2, RefreshCw } from "lucide-react";
 
 // Define IPC keys here or in a types file for safety
 const IPC = {
@@ -15,6 +15,7 @@ const IPC = {
   DELETE_GROUP: "delete-group",
   ADD_ACC_TO_GROUP: "add-account-to-group",
   REMOVE_ACC_FROM_GROUP: "remove-account-from-group",
+  CHECK_ALL_STATUS: "check-account-health",
 };
 
 export default function Account() {
@@ -29,6 +30,8 @@ export default function Account() {
   // Modals State
   const [isConnectModalOpen, setIsConnectModalOpen] = useState(false);
   const [isGroupManagerOpen, setIsGroupManagerOpen] = useState(false);
+
+  const [isChecking, setIsChecking] = useState(false);
 
   // Account Editing State
   const [editingAccount, setEditingAccount] =
@@ -46,6 +49,22 @@ export default function Account() {
       setGroups(_groups || []);
     } catch (err) {
       console.error("Failed to load data", err);
+    }
+  };
+
+  const handleCheckAllStatus = async () => {
+    if (isChecking) return;
+
+    setIsChecking(true);
+    try {
+      // Invoke backend to verify cookies/tokens for all accounts
+      await window.electron.ipcRenderer.invoke(IPC.CHECK_ALL_STATUS);
+      // Refresh to show updated statuses (e.g. Red/Green badges)
+      await refreshData();
+    } catch (error) {
+      console.error("Failed to check account statuses:", error);
+    } finally {
+      setIsChecking(false);
     }
   };
 
@@ -156,6 +175,18 @@ export default function Account() {
           </p>
         </div>
         <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={handleCheckAllStatus}
+            disabled={isChecking}
+            className="btn btn-outline shadow-sm gap-2"
+          >
+            <RefreshCw
+              className={`w-4 h-4 ${isChecking ? "animate-spin" : ""}`}
+            />
+            {isChecking ? "Checking..." : "Check Status"}
+          </button>
+
           <button
             type="button"
             onClick={() => setIsGroupManagerOpen(true)}

@@ -25,6 +25,8 @@ interface WebContentsAPI {
     groupId: number,
   ) => Promise<number | null>;
 
+  checkAllAccounts: () => Promise<void>;
+
   // groups
   getGroups: () => Promise<Group[] | null>;
   createGroup: (name: string) => Promise<number | null>;
