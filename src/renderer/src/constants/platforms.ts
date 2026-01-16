@@ -22,6 +22,18 @@ export enum Platform {
   ZH = "ZH",
 }
 
+export const Icons: Record<Platform, string> = {
+  [Platform.BiliBili]: BiliIcon,
+  [Platform.WX]: WxIcon,
+  [Platform.DY]: DyIcon,
+  [Platform.KS]: KsIcon,
+  [Platform.TXWS]: TxwsIcon,
+  [Platform.TT]: TtIcon,
+  [Platform.XG]: XgIcon,
+  [Platform.XHS]: XhsIcon,
+  [Platform.ZH]: ZhIcon,
+};
+
 // 2. Define the Interface for type safety
 export interface PlatformMetadata {
   url: string;
