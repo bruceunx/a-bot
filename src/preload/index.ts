@@ -9,8 +9,8 @@ const api = {
   // cookies
   getCookies: (webContentsId: number) =>
     ipcRenderer.invoke("get-cookies", webContentsId),
-  loadCookies: (webContentsId: number, cookies: Cookie[]) =>
-    ipcRenderer.invoke("load-cookies", webContentsId, cookies),
+  loadCookies: (webContentsId: number, cookies: Cookie[], cookieUrl?: string) =>
+    ipcRenderer.invoke("load-cookies", webContentsId, cookies, cookieUrl),
 
   // accounts
   saveAccount: (

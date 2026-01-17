@@ -31,11 +31,17 @@ export async function checkAccountHealth(
       partition: "temp:health-check",
       sandbox: true,
       images: false,
+      backgroundThrottling: false,
     },
   });
 
   try {
     const ses = win.webContents.session;
+
+    const userAgent =
+      "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
+
+    ses.setUserAgent(userAgent);
 
     await ses.clearStorageData({ storages: ["cookies"] });
 
@@ -58,21 +64,15 @@ export async function checkAccountHealth(
       }
     }
 
-    await win.loadURL(rule.url);
-    console.log(rule.creator_url);
-    await new Promise<void>((resolve) => {
-      // If it's already done, resolve immediately
-      if (!win.webContents.isLoading()) {
-        return resolve();
-      }
-      // Otherwise wait for the event
-      win.webContents.once("did-finish-load", () => resolve());
-    });
+    try {
+      await win.loadURL(rule.url, { userAgent });
+    } catch (error) {
+      console.warn(`Load URL finished with warning (continuing):`, error);
+    }
 
-    // 3. (Crucial for SPAs) Wait for hydration
-    // Even after 'did-finish-load', sites like TikTok/XHS take 1-3 seconds
-    // to execute their JS and populate the window object or DOM.
-    await sleep(3000);
+    console.log(`Loaded: ${rule.creator_url} - Waiting for hydration...`);
+
+    await sleep(4000);
 
     const authResult = await win.webContents.executeJavaScript(rule.script);
     console.log("check authResult", authResult);

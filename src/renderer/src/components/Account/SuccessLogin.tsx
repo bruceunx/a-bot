@@ -1,5 +1,5 @@
-import { LOGIN_METADATA, type Platform } from "@renderer/constants/platforms";
-import * as Icons from "../Icons";
+import { LOGIN_METADATA, type Platform } from "@common/constants";
+import { Check } from "lucide-react";
 
 interface SuccessLoginProps {
   platform: Platform;
@@ -17,7 +17,7 @@ export default function SuccessLogin({
       <div className="relative">
         <div className="absolute -inset-4 bg-success/20 rounded-full blur-2xl animate-pulse"></div>
         <div className="w-20 h-20 bg-success text-success-content rounded-3xl flex items-center justify-center shadow-2xl relative rotate-3">
-          <Icons.Check className="w-12 h-12 stroke-[3px]" />
+          <Check className="w-12 h-12 stroke-[3px]" />
         </div>
       </div>
       <div className="space-y-2">

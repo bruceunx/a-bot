@@ -31,14 +31,14 @@ export function registerCookieHandles() {
 
   ipcMain.handle(
     "load-cookies",
-    async (_, webContentsId: number, cookies: Cookie[]) => {
+    async (_, webContentsId: number, cookies: Cookie[], cookieUrl?: string) => {
       const wc = webContents.fromId(webContentsId);
       if (!wc) return;
 
       for (const cookie of cookies) {
         try {
           const newCookie = {
-            url: getUrlFromCookieDomain(cookie),
+            url: cookieUrl ?? getUrlFromCookieDomain(cookie),
             name: cookie.name,
             value: cookie.value,
             domain: cookie.domain,

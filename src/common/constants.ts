@@ -5,9 +5,7 @@ export enum Platform {
   KS = "KS",
   TXWS = "TXWS",
   TT = "TT",
-  XG = "XG",
   XHS = "XHS",
-  ZH = "ZH",
 }
 
 // 2. Define the Interface for type safety
@@ -18,7 +16,6 @@ export interface PlatformMetadata {
   prefix: string;
   script: string;
   title: string;
-  icon?: string;
   selector: string;
   // Optional fields
   publish_url_image?: string;
@@ -88,7 +85,17 @@ export const LOGIN_METADATA: Record<Platform, PlatformMetadata> = {
           var div_element = document.querySelector('div.header-info-card');
           var name_element = div_element ? div_element.querySelector('div.user-name') : null;
           var img = div_element ? div_element.querySelector('img') : null;
-          return { name: name_element ? name_element.textContent : '', avatar: img ? img.src : '' };
+          var accountId = '';
+          if (name_element) {
+            var text = name_element.textContent;
+            for (var i = 0; i < text.length; i++) {
+              var charCode = text.charCodeAt(i);
+              if (charCode >= 48 && charCode <= 57) {
+                accountId += text[i];
+              }
+            }
+          }
+          return { accountId, username: name_element ? name_element.textContent : '', avatar: img ? img.src : ''};
       })();
     `,
     title: "快手视频",
@@ -125,23 +132,6 @@ export const LOGIN_METADATA: Record<Platform, PlatformMetadata> = {
     title: "头条",
     selector: "img.auth-avator-img",
   },
-  [Platform.XG]: {
-    url: "https://studio.ixigua.com",
-    creator_url: "https://studio.ixigua.com/",
-    cookie_url: "https://studio.ixigua.com/",
-    prefix: "xg",
-    script: `
-      (function() {
-          var name_element = document.querySelector('div.user-info__username');
-          var div_element = document.querySelector('div.img-wrapper');
-          var img = div_element ? div_element.querySelector('img') : null;
-          return { name: name_element ? name_element.textContent : '', avatar: img ? img.src : '' };
-      })();
-    `,
-    title: "西瓜视频",
-    publish_url_video: "https://studio.ixigua.com/upload?from=post_article",
-    selector: "div.user-info__username",
-  },
   [Platform.XHS]: {
     url: "https://creator.xiaohongshu.com",
     creator_url: "https://creator.xiaohongshu.com/new/home",
@@ -170,22 +160,5 @@ export const LOGIN_METADATA: Record<Platform, PlatformMetadata> = {
     publish_url_image: "https://creator.xiaohongshu.com/publish/publish",
     publish_url_video: "https://creator.xiaohongshu.com/publish/publish",
     selector: "div.account-name",
-  },
-  [Platform.ZH]: {
-    url: "https://www.zhihu.com/creator",
-    creator_url: "https://www.zhihu.com/creator",
-    cookie_url: "https://www.zhihu.com/creator",
-    prefix: "zh",
-    script: `
-      (function() {
-          var name_element = document.querySelector('div.LevelInfoV2-creatorInfo.css-sbvk4m');
-          var img = document.querySelector('img.Avatar');
-          return { name: name_element ? name_element.textContent : '', avatar: img ? img.src : '' };
-      })();
-    `,
-    title: "知乎",
-    publish_url_image: "https://zhuanlan.zhihu.com/write",
-    publish_url_video: "https://www.zhihu.com/zvideo/upload-video",
-    selector: "div.LevelInfoV2-creatorInfo.css-sbvk4m",
   },
 };

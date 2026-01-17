@@ -176,7 +176,7 @@ export default function Account() {
             className="btn btn-primary shadow-lg gap-2"
           >
             <Icons.Plus className="w-5 h-5" />
-            Add Connection
+            New Account
           </button>
         </div>
       </header>

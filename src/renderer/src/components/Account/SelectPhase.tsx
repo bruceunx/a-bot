@@ -2,7 +2,8 @@ import {
   LOGIN_METADATA,
   type Platform,
   type PlatformMetadata,
-} from "@renderer/constants/platforms";
+} from "@common/constants";
+import { Icons } from "@renderer/constants/platforms";
 
 // 4. Component Definition
 interface SelectPhaseProps {
@@ -34,7 +35,7 @@ export default function SelectPhase({ onPlatformSelect }: SelectPhaseProps) {
               {/* Icon Container */}
               <div className="relative w-12 h-12 flex items-center justify-center transition-transform group-hover:scale-110 duration-300">
                 <img
-                  src={meta.icon}
+                  src={Icons[key]}
                   alt={`${meta.title} logo`}
                   className="w-full h-full object-contain"
                 />

@@ -96,7 +96,7 @@ export default function AccountCenter() {
               onClick={() => openTab(acc)}
               disabled={!acc.status}
               className={`w-full flex items-center gap-3 p-2 rounded-xl transition-all group
-                ${tabs.some((t) => t.accountId === acc.accountId) ? "bg-primary/10 border-primary/20" : "hover:bg-base-300"}
+                ${tabs.some((t) => t.accountId === acc.accountId) ? "bg-primary/10 border-primary/20" : "hover:bg-base-300"} ${!acc.status && "grayscale disabled:cursor-not-allowed"}
               `}
             >
               <img

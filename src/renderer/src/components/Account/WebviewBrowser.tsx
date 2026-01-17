@@ -1,10 +1,9 @@
 import type { WebviewTag } from "electron";
 import type { DidNavigateEvent } from "electron/renderer";
-import type { Platform } from "@renderer/constants/platforms";
 import type { UIParseAccount } from "@common/types";
 
 import { useRef, useEffect, useState } from "react";
-import { LOGIN_METADATA } from "@renderer/constants/platforms";
+import { LOGIN_METADATA, type Platform } from "@common/constants";
 
 interface WebviewBrowserProps {
   platform: Platform;

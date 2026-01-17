@@ -1,6 +1,6 @@
 import type { UIParseAccount } from "@common/types";
-import { LOGIN_METADATA, type Platform } from "@renderer/constants/platforms";
 
+import { LOGIN_METADATA, type Platform } from "@common/constants";
 import { useState, useEffect } from "react";
 import * as Icons from "../Icons";
 import WebviewBrowser from "./WebviewBrowser";
