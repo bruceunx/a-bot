@@ -104,9 +104,6 @@ export function AccountGroupEditor({
                       >
                         {group.name}
                       </span>
-                      <span className="text-xs text-base-content/50 truncate">
-                        ID: {group.id}
-                      </span>
                     </div>
                   </div>
 
