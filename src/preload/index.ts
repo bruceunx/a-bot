@@ -19,6 +19,7 @@ const api = {
     platform: string,
   ) => ipcRenderer.invoke("save-account", webContentsId, account, platform),
   getAccounts: () => ipcRenderer.invoke("get-accounts"),
+  delAccount: () => ipcRenderer.invoke("del-account"),
 
   addAccountToGroup: (accountId: number, groupId: number) =>
     ipcRenderer.invoke("add-account-to-group", accountId, groupId),

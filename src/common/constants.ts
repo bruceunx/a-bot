@@ -17,6 +17,7 @@ export interface PlatformMetadata {
   script: string;
   title: string;
   selector: string;
+  domain_url?: string;
   // Optional fields
   publish_url_image?: string;
   publish_url_video?: string;
@@ -99,6 +100,7 @@ export const LOGIN_METADATA: Record<Platform, PlatformMetadata> = {
       })();
     `,
     title: "快手视频",
+    domain_url: ".kuaishou.com",
     selector: "div.info-top-name",
   },
   [Platform.TXWS]: {

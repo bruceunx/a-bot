@@ -59,6 +59,7 @@ export async function checkAccountHealth(
           sameSite: cookie.sameSite,
         };
         await ses.cookies.set(newCookie);
+        console.log("new Cookie", newCookie);
       } catch (e) {
         console.warn("Failed to restore cookie", cookie, e);
       }

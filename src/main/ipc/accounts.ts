@@ -4,6 +4,7 @@ import { ipcMain, webContents } from "electron";
 import {
   addAccount,
   addAccountToGroup,
+  deleteAccount,
   getAccounts,
   removeAccountFromGroup,
   updateAccountStatus,
@@ -43,6 +44,16 @@ export function registerAccountsHandles() {
     try {
       const accounts = getAccounts();
       return accounts;
+    } catch (error) {
+      console.error("Failed to get accounts", error);
+      return null;
+    }
+  });
+
+  ipcMain.handle("del-account", async (_, id: number) => {
+    try {
+      const result = deleteAccount(id);
+      return result.changes > 0;
     } catch (error) {
       console.error("Failed to get accounts", error);
       return null;

@@ -20,6 +20,7 @@ interface WebContentsAPI {
     platform: string,
   ) => Promise<number | null>;
   getAccounts: () => Promise<AccountWithGroups[] | null>;
+  delAccount: () => Promise<boolean | null>;
   addAccountToGroup: (
     accountId: number,
     groupId: number,

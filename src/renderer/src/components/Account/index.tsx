@@ -54,6 +54,11 @@ export default function Account() {
     refreshData();
   };
 
+  const handleDeleteAccount = async (id: number) => {
+    await window.electron.ipcRenderer.invoke(IPC.DEL_ACCOUNT, id);
+    refreshData();
+  };
+
   const handleDeleteGroup = async (id: number) => {
     if (
       !confirm(
@@ -295,7 +300,9 @@ export default function Account() {
 
                     <button
                       type="button"
-                      className="btn btn-ghost btn-circle btn-xs text-error"
+                      className="btn btn-ghost btn-circle btn-xs text-error tooltip"
+                      data-tip="Delete Account"
+                      onClick={() => handleDeleteAccount(account.id)}
                     >
                       <Trash2 className="w-3 h-3" />
                     </button>

@@ -116,6 +116,13 @@ export function updateAccountStatus(id: number, status: number) {
   return stmt.run({ id, status });
 }
 
+export function deleteAccount(id: number) {
+  if (!db) throw new Error("Database not initialized");
+
+  const stmt = db.prepare(`DELETE FROM accounts WHERE id = ?`);
+  return stmt.run(id);
+}
+
 export function createGroup(name: string) {
   if (!db) throw new Error("Database not initialized");
 
