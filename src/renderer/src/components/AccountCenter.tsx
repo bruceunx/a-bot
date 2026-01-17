@@ -18,7 +18,7 @@ export default function AccountCenter() {
   const { accounts, refreshData } = useAccountStore();
 
   const [tabs, setTabs] = useState<BrowserTab[]>([]);
-  const [activeTabId, setActiveTabId] = useState<string | null>(null);
+  const [activeTabId, setActiveTabId] = useState<number | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredAccounts = useMemo(() => {
@@ -41,7 +41,7 @@ export default function AccountCenter() {
     // Check if tab already exists
     const existingTab = tabs.find((t) => t.accountId === account.accountId);
     if (existingTab) {
-      setActiveTabId(existingTab.accountId);
+      setActiveTabId(existingTab.id);
       return;
     }
 
@@ -52,21 +52,21 @@ export default function AccountCenter() {
     };
 
     setTabs([...tabs, newTab]);
-    setActiveTabId(newTab.accountId);
+    setActiveTabId(newTab.id);
   };
 
-  const closeTab = (e: MouseEvent, tabId: string) => {
+  const closeTab = (e: MouseEvent, tabId: number) => {
     e.stopPropagation();
-    const newTabs = tabs.filter((t) => t.accountId !== tabId);
+    const newTabs = tabs.filter((t) => t.id !== tabId);
     setTabs(newTabs);
     if (activeTabId === tabId) {
       setActiveTabId(
-        newTabs.length > 0 ? newTabs[newTabs.length - 1].accountId : null,
+        newTabs.length > 0 ? newTabs[newTabs.length - 1].id : null,
       );
     }
   };
 
-  const activeTab = tabs.find((t) => t.accountId === activeTabId);
+  const activeTab = tabs.find((t) => t.id === activeTabId);
 
   return (
     <div className="flex h-full bg-base-300/30 overflow-hidden animate-in fade-in duration-500">
@@ -129,10 +129,10 @@ export default function AccountCenter() {
           {tabs.map((tab) => (
             <div
               key={tab.id}
-              onClick={() => setActiveTabId(tab.accountId)}
+              onClick={() => setActiveTabId(tab.id)}
               className={`group flex items-center gap-2 px-4 py-2 text-[11px] font-bold rounded-t-lg cursor-pointer transition-all border-x border-t min-w-[120px] max-w-[200px]
                 ${
-                  activeTabId === tab.accountId
+                  activeTabId === tab.id
                     ? "bg-base-100 border-base-300 text-main shadow-[0_-4px_10px_rgba(0,0,0,0.1)]"
                     : "bg-transparent border-transparent text-muted hover:bg-base-300"
                 }
@@ -146,7 +146,7 @@ export default function AccountCenter() {
 
               <span className="truncate flex-1">{tab.account.username}</span>
               <button
-                onClick={(e) => closeTab(e, tab.accountId)}
+                onClick={(e) => closeTab(e, tab.id)}
                 className="hover:cursor-pointer hover:text-base-content/50 p-0"
               >
                 <X className="w-3 h-3" />
