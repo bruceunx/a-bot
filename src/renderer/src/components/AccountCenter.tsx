@@ -7,6 +7,7 @@ import { X } from "lucide-react";
 import { Icons } from "@renderer/constants/platforms";
 import { Search } from "./Icons";
 import type { Platform } from "@common/constants";
+import CreateCenter from "./common/CreateCenter";
 
 interface BrowserTab {
   id: number;
@@ -165,8 +166,8 @@ export default function AccountCenter() {
         <div className="flex-1 bg-base-100 flex flex-col relative">
           {activeTab ? (
             <div className="flex-1 flex flex-col">
-              <div className="w-full h-full opacity-5 grayscale pointer-events-none p-10 space-y-10">
-                <p>webview content</p>
+              <div className="w-full h-full p-10 space-y-10">
+                <CreateCenter account={activeTab.account} />
               </div>
             </div>
           ) : (

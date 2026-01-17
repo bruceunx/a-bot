@@ -7,7 +7,7 @@ interface WebContentsAPI {
   getCookies: (webContentsId: number) => Promise<{
     cookies: Cookie[];
   } | null>;
-  loadCookies: (webContentsId: number) => Promise<number | null>;
+  loadCookies: (webContentsId: number, cookies: Cookie[]) => Promise<number | null>;
 
   // accounts
   saveAccount: (

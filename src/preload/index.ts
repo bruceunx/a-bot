@@ -1,14 +1,16 @@
+import type { UIParseAccount } from "@common/types";
+import type { Cookie } from "electron";
+
 import { contextBridge, ipcRenderer } from "electron";
 import { electronAPI } from "@electron-toolkit/preload";
-import type { UIParseAccount } from "@common/types";
 
 // Custom APIs for renderer
 const api = {
   // cookies
   getCookies: (webContentsId: number) =>
     ipcRenderer.invoke("get-cookies", webContentsId),
-  loadCookies: (webContentsId: number) =>
-    ipcRenderer.invoke("load-cookies", webContentsId),
+  loadCookies: (webContentsId: number, cookies: Cookie[]) =>
+    ipcRenderer.invoke("load-cookies", webContentsId, cookies),
 
   // accounts
   saveAccount: (

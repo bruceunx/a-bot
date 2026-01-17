@@ -30,47 +30,31 @@ export function registerCookieHandles() {
   });
 
   ipcMain.handle(
-    "set-cookie",
-    async (_, webContentsId: number, cookieDetails) => {
-      try {
-        const contents = webContents.fromId(webContentsId);
-        if (!contents) {
-          return { success: false, error: "WebContents not found" };
+    "load-cookies",
+    async (_, webContentsId: number, cookies: Cookie[]) => {
+      const wc = webContents.fromId(webContentsId);
+      if (!wc) return;
+
+      for (const cookie of cookies) {
+        try {
+          const newCookie = {
+            url: getUrlFromCookieDomain(cookie),
+            name: cookie.name,
+            value: cookie.value,
+            domain: cookie.domain,
+            path: cookie.path,
+            secure: cookie.secure,
+            httpOnly: cookie.httpOnly,
+            expirationDate: cookie.expirationDate, // Vital for persistent login
+            sameSite: cookie.sameSite,
+          };
+          console.log("new Cookie", newCookie);
+          await wc.session.cookies.set(newCookie);
+        } catch (e) {
+          console.warn("Failed to restore cookie", cookie, e);
         }
-        for (const cookie of cookieDetails) {
-          await contents.session.cookies.set(cookie);
-        }
-        return { success: true };
-      } catch (error) {
-        return { success: false, error: `Error setting cookie: ${error}` };
       }
+      return cookies.length;
     },
   );
-
-  ipcMain.handle("load-cookies", async (_, webContentsId: number) => {
-    const wc = webContents.fromId(webContentsId);
-    if (!wc) return;
-
-    const cookies: Cookie[] = [];
-    for (const cookie of cookies) {
-      try {
-        const newCookie = {
-          url: getUrlFromCookieDomain(cookie),
-          name: cookie.name,
-          value: cookie.value,
-          domain: cookie.domain,
-          path: cookie.path,
-          secure: cookie.secure,
-          httpOnly: cookie.httpOnly,
-          expirationDate: cookie.expirationDate, // Vital for persistent login
-          sameSite: cookie.sameSite,
-        };
-        console.log("new Cookie", newCookie);
-        await wc.session.cookies.set(newCookie);
-      } catch (e) {
-        console.warn("Failed to restore cookie", cookie, e);
-      }
-    }
-    return cookies.length;
-  });
 }
