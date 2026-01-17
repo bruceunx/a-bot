@@ -1,4 +1,4 @@
-import type { AccountWithGroups, Group } from "@common/types";
+import type { AccountWithGroups } from "@common/types";
 
 import { useState, useMemo, useEffect } from "react";
 import * as Icons from "../Icons";
@@ -6,22 +6,12 @@ import { ConnectAccountModal } from "./ConnectAccountModal";
 import { GroupManagerModal } from "./GroupManagerModal"; // Import new component
 import { AccountGroupEditor } from "./AccountGroupEditor"; // Import new component
 import { Edit, Trash2, RefreshCw } from "lucide-react";
-
-// Define IPC keys here or in a types file for safety
-const IPC = {
-  GET_ACCOUNTS: "get-accounts",
-  GET_GROUPS: "get-groups",
-  CREATE_GROUP: "create-group",
-  DELETE_GROUP: "delete-group",
-  ADD_ACC_TO_GROUP: "add-account-to-group",
-  REMOVE_ACC_FROM_GROUP: "remove-account-from-group",
-  CHECK_ALL_STATUS: "check-account-health",
-};
+import { IPC } from "@renderer/constants/ipc";
+import { useAccountStore } from "@renderer/store/useAccountStore";
 
 export default function Account() {
-  // State
-  const [accounts, setAccounts] = useState<AccountWithGroups[]>([]);
-  const [groups, setGroups] = useState<Group[]>([]);
+  const { accounts, groups, refreshData } = useAccountStore();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedGroupFilter, setSelectedGroupFilter] = useState<
     number | "All" | "Ungrouped"
@@ -36,21 +26,6 @@ export default function Account() {
   // Account Editing State
   const [editingAccount, setEditingAccount] =
     useState<AccountWithGroups | null>(null);
-
-  // --- Data Loading ---
-  const refreshData = async () => {
-    try {
-      const [_accounts, _groups] = await Promise.all([
-        window.electron.ipcRenderer.invoke(IPC.GET_ACCOUNTS),
-        window.electron.ipcRenderer.invoke(IPC.GET_GROUPS),
-      ]);
-      // Assuming IPC returns raw arrays. Adjust if it returns { accounts: [] }
-      setAccounts(_accounts || []);
-      setGroups(_groups || []);
-    } catch (err) {
-      console.error("Failed to load data", err);
-    }
-  };
 
   const handleCheckAllStatus = async () => {
     if (isChecking) return;

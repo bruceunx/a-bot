@@ -51,7 +51,6 @@ export function initDatabase() {
     db.exec(createGroupsTable);
     db.exec(createAccountGroupsTable);
   })();
-  console.log(`Database initialized at: ${dbPath}`);
 }
 
 export function addAccount(account: Account) {
