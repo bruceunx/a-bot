@@ -162,20 +162,25 @@ export default function AccountCenter() {
           )}
         </div>
 
-        {/* Browser Content */}
         <div className="flex-1 bg-base-100 flex flex-col relative">
-          {activeTab ? (
-            <div className="flex-1 flex flex-col">
+          {tabs.map((tab) => (
+            <div
+              key={tab.id}
+              className={`absolute inset-0 ${activeTabId === tab.id ? "block" : "hidden"}`}
+            >
               <div className="w-full h-full p-10 space-y-10">
-                <CreateCenter account={activeTab.account} />
+                <CreateCenter account={tab.account} />
               </div>
             </div>
-          ) : (
+          ))}
+
+          {tabs.length === 0 && (
             <div className="flex-1 flex flex-col items-center justify-center text-center p-12 bg-base-100">
               <p>Logo or advertisement</p>
             </div>
           )}
         </div>
+
       </div>
     </div>
   );
