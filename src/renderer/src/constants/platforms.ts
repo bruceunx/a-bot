@@ -11,7 +11,7 @@ import XhsIcon from "../assets/icons/xhs.svg";
 //
 
 export const Icons: Record<Platform, string> = {
-  [Platform.BiliBili]: BiliIcon,
+  [Platform.BILIBILI]: BiliIcon,
   [Platform.WX]: WxIcon,
   [Platform.DY]: DyIcon,
   [Platform.KS]: KsIcon,

@@ -2,12 +2,13 @@ import type { UIParseAccount } from "@common/types";
 
 import { LOGIN_METADATA, type Platform } from "@common/constants";
 import { useState, useEffect } from "react";
-import * as Icons from "../Icons";
+
 import WebviewBrowser from "./WebviewBrowser";
 import ProgressIndicator from "./ProgressIndicator";
 import SelectPhase from "./SelectPhase";
 import Logs from "./Logs";
 import SuccessLogin from "./SuccessLogin";
+import { ChevronLeft, X } from "lucide-react";
 
 interface ConnectAccountModalProps {
   isOpen: boolean;
@@ -74,7 +75,7 @@ export function ConnectAccountModal({
                 onClick={() => setStep("select")}
                 className="btn btn-ghost btn-xs btn-circle"
               >
-                <Icons.ChevronLeft className="w-4 h-4" />
+                <ChevronLeft className="w-4 h-4" />
               </button>
             )}
             <div className="flex flex-col">
@@ -97,7 +98,7 @@ export function ConnectAccountModal({
               onClick={onClose}
               className="btn btn-ghost btn-xs btn-circle"
             >
-              <Icons.X className="w-4 h-4" />
+              <X className="w-4 h-4" />
             </button>
           </div>
         </div>
