@@ -1,6 +1,7 @@
 import type { Cookie } from "electron";
 
 import { ipcMain, webContents } from "electron";
+import { setCookiesToSession } from "../utils";
 
 function getUrlFromCookieDomain(cookie: Cookie): string {
   const domain = cookie.domain?.startsWith(".")
@@ -31,29 +32,12 @@ export function registerCookieHandles() {
 
   ipcMain.handle(
     "load-cookies",
-    async (_, webContentsId: number, cookies: Cookie[], cookieUrl?: string) => {
+    async (_, webContentsId: number, cookies: Cookie[], cookieUrl: string) => {
       const wc = webContents.fromId(webContentsId);
       if (!wc) return;
 
-      for (const cookie of cookies) {
-        try {
-          const newCookie = {
-            url: cookieUrl ?? getUrlFromCookieDomain(cookie),
-            name: cookie.name,
-            value: cookie.value,
-            domain: cookie.domain,
-            path: cookie.path,
-            secure: cookie.secure,
-            httpOnly: cookie.httpOnly,
-            expirationDate: cookie.expirationDate, // Vital for persistent login
-            sameSite: cookie.sameSite,
-          };
-          console.log("new Cookie", newCookie);
-          await wc.session.cookies.set(newCookie);
-        } catch (e) {
-          console.warn("Failed to restore cookie", cookie, e);
-        }
-      }
+      await setCookiesToSession(wc.session, cookies, cookieUrl);
+
       return cookies.length;
     },
   );

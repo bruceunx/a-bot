@@ -1,12 +1,12 @@
 import type { MouseEvent } from "react";
 import type { AccountWithGroups } from "@common/types";
+import type { Platform } from "@common/constants";
 
 import { useState, useMemo, useEffect } from "react";
 import { useAccountStore } from "@renderer/store/useAccountStore";
 import { X } from "lucide-react";
 import { Icons } from "@renderer/constants/platforms";
 import { Search } from "./Icons";
-import type { Platform } from "@common/constants";
 import CreateCenter from "./common/CreateCenter";
 
 interface BrowserTab {

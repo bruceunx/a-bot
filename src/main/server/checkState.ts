@@ -1,14 +1,6 @@
 import { LOGIN_METADATA, type PlatformMetadata } from "@common/constants";
 import { BrowserWindow, type Cookie } from "electron";
-
-function getUrlFromCookieDomain(cookie: Cookie): string {
-  const domain = cookie.domain?.startsWith(".")
-    ? cookie.domain.substring(1)
-    : cookie.domain;
-
-  const scheme = cookie.secure ? "https" : "http";
-  return `${scheme}://${domain}${cookie.path}`;
-}
+import { setCookiesToSession } from "../utils";
 
 const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -45,33 +37,13 @@ export async function checkAccountHealth(
 
     await ses.clearStorageData({ storages: ["cookies"] });
 
-    for (const cookie of cookies) {
-      try {
-        const newCookie = {
-          url: getUrlFromCookieDomain(cookie),
-          name: cookie.name,
-          value: cookie.value,
-          domain: cookie.domain,
-          path: cookie.path,
-          secure: cookie.secure,
-          httpOnly: cookie.httpOnly,
-          expirationDate: cookie.expirationDate,
-          sameSite: cookie.sameSite,
-        };
-        await ses.cookies.set(newCookie);
-        console.log("new Cookie", newCookie);
-      } catch (e) {
-        console.warn("Failed to restore cookie", cookie, e);
-      }
-    }
+    await setCookiesToSession(ses, cookies, rule.cookie_url);
 
     try {
-      await win.loadURL(rule.url, { userAgent });
+      await win.loadURL(rule.creator_url, { userAgent });
     } catch (error) {
       console.warn(`Load URL finished with warning (continuing):`, error);
     }
-
-    console.log(`Loaded: ${rule.creator_url} - Waiting for hydration...`);
 
     await sleep(4000);
 
@@ -83,8 +55,6 @@ export async function checkAccountHealth(
     console.error(`Health check failed for ${platform}:`, err);
     return false;
   } finally {
-    // 6. Cleanup: Close the window to free RAM
-    // Force close to prevent memory leaks
     win.destroy();
   }
 }

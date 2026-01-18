@@ -28,6 +28,7 @@ export default function CreateCenter({ account }: Props) {
           "load-cookies",
           guestId,
           account.cookies,
+          plaformMetadata.cookie_url,
         );
         console.log("loadCookieResult", loadCookieResult);
       } catch (error) {
@@ -41,13 +42,13 @@ export default function CreateCenter({ account }: Props) {
       webview.removeEventListener("dom-ready", handleDomReady);
     };
     //
-  }, [account]);
+  }, [account, plaformMetadata]);
 
   return (
     <div className="flex flex-col h-screen">
       <webview
         ref={webviewRef}
-        src={plaformMetadata.url}
+        src={plaformMetadata.creator_url}
         className="flex-1 border-none"
         partition={partition}
       />

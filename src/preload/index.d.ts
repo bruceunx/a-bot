@@ -10,7 +10,7 @@ interface WebContentsAPI {
   loadCookies: (
     webContentsId: number,
     cookies: Cookie[],
-    cookieUrl?: string,
+    cookieUrl: string,
   ) => Promise<number | null>;
 
   // accounts
