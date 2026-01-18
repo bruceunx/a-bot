@@ -1,11 +1,11 @@
 export enum Platform {
-  BiliBili = "BiliBili",
-  WX = "WX",
-  DY = "DY",
-  KS = "KS",
-  TXWS = "TXWS",
-  TT = "TT",
-  XHS = "XHS",
+  BILIBILI = "bilibili",
+  WX = "wx",
+  DY = "dy",
+  KS = "ks",
+  TXWS = "txws",
+  TT = "tt",
+  XHS = "xhs",
 }
 
 // 2. Define the Interface for type safety
@@ -25,7 +25,7 @@ export interface PlatformMetadata {
 
 // 3. The converted data object
 export const LOGIN_METADATA: Record<Platform, PlatformMetadata> = {
-  [Platform.BiliBili]: {
+  [Platform.BILIBILI]: {
     url: "https://passport.bilibili.com/login?gourl=https%3A%2F%2Faccount.bilibili.com%2Faccount%2Fhome",
     creator_url: "https://member.bilibili.com/platform/home",
     cookie_url: "https://member.bilibili.com",

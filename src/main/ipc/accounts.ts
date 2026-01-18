@@ -7,6 +7,7 @@ import {
   deleteAccount,
   getAccounts,
   removeAccountFromGroup,
+  updateAccountCookies,
   updateAccountStatus,
 } from "../db";
 import { checkAccountHealth } from "../server/checkState";
@@ -33,9 +34,26 @@ export function registerAccountsHandles() {
         console.log(
           `[DB] Saved ${account.username} (${platform}) with ${cookies.length} cookies.`,
         );
-        return { success: true, cookieCount: cookies.length };
+        return cookies.length;
       } catch (_) {
-        return { success: false, cookieCount: 0 };
+        return 0;
+      }
+    },
+  );
+
+  ipcMain.handle(
+    "update-account",
+    async (_, webContentsId: number, id: number) => {
+      const wc = webContents.fromId(webContentsId);
+      if (!wc) return;
+      const cookies = await wc.session.cookies.get({});
+
+      try {
+        updateAccountCookies(id, cookies);
+        console.log(`[DB] Updated id: ${id}  cookies.`);
+        return cookies.length;
+      } catch (_) {
+        return 0;
       }
     },
   );

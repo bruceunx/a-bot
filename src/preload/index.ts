@@ -18,6 +18,10 @@ const api = {
     account: UIParseAccount,
     platform: string,
   ) => ipcRenderer.invoke("save-account", webContentsId, account, platform),
+
+  updateAccount: (webContentsId: number, id: number) =>
+    ipcRenderer.invoke("update-account", webContentsId, id),
+
   getAccounts: () => ipcRenderer.invoke("get-accounts"),
   delAccount: () => ipcRenderer.invoke("del-account"),
 

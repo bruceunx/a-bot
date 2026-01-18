@@ -8,6 +8,7 @@ import { AccountGroupEditor } from "./AccountGroupEditor"; // Import new compone
 import { Edit, Trash2, RefreshCw } from "lucide-react";
 import { IPC } from "@renderer/constants/ipc";
 import { useAccountStore } from "@renderer/store/useAccountStore";
+import ReauthAccountModal from "./ReauthAccountModal";
 
 export default function Account() {
   const { accounts, groups, refreshData } = useAccountStore();
@@ -16,6 +17,10 @@ export default function Account() {
   const [selectedGroupFilter, setSelectedGroupFilter] = useState<
     number | "All" | "Ungrouped"
   >("All");
+
+  const [reauthAccount, setReauthAccount] = useState<AccountWithGroups | null>(
+    null,
+  );
 
   // Modals State
   const [isConnectModalOpen, setIsConnectModalOpen] = useState(false);
@@ -142,6 +147,12 @@ export default function Account() {
         account={editingAccount}
         allGroups={groups}
         onToggleGroup={handleToggleAccountGroup}
+      />
+
+      <ReauthAccountModal
+        isOpen={!!reauthAccount}
+        onClose={() => setReauthAccount(null)}
+        account={reauthAccount}
       />
 
       {/* --- Header --- */}

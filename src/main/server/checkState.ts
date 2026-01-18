@@ -1,4 +1,8 @@
-import { LOGIN_METADATA, type PlatformMetadata } from "@common/constants";
+import {
+  LOGIN_METADATA,
+  type Platform,
+  type PlatformMetadata,
+} from "@common/constants";
 import { BrowserWindow, type Cookie } from "electron";
 import { setCookiesToSession } from "../utils";
 
@@ -8,7 +12,7 @@ export async function checkAccountHealth(
   platform: string,
   cookies: Cookie[],
 ): Promise<boolean> {
-  const rule: PlatformMetadata = LOGIN_METADATA[platform.toUpperCase()];
+  const rule: PlatformMetadata = LOGIN_METADATA[platform as Platform];
   if (!rule) {
     console.error(`No health check rules for platform: ${platform}`);
     return false;

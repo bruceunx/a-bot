@@ -1,7 +1,9 @@
 // Define IPC keys here or in a types file for safety
 export const IPC = {
+  SAVE_ACCOUNT: "save-account",
   GET_ACCOUNTS: "get-accounts",
   DEL_ACCOUNT: "del-account",
+  UPDATE_ACCOUNT: "update-account",
   GET_GROUPS: "get-groups",
   CREATE_GROUP: "create-group",
   DELETE_GROUP: "delete-group",

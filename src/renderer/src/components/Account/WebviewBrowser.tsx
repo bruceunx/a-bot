@@ -18,6 +18,7 @@ export default function WebviewBrowser({
 
   const webviewRef = useRef<WebviewTag>(null);
   const [partition] = useState(() => `private_${platform}_${Date.now()}`);
+
   useEffect(() => {
     const webview = webviewRef.current;
     if (!webview) return;

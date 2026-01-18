@@ -19,6 +19,7 @@ interface WebContentsAPI {
     account: UIParseAccount,
     platform: string,
   ) => Promise<number | null>;
+  updateAccount: (webContentsId: number, id: number) => Promise<number | null>;
   getAccounts: () => Promise<AccountWithGroups[] | null>;
   delAccount: () => Promise<boolean | null>;
   addAccountToGroup: (

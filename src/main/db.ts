@@ -1,5 +1,6 @@
 import type { Group } from "@common/types";
 import type { AccountRow, Account } from "./types";
+import type { Cookie } from "electron";
 
 import Database from "better-sqlite3";
 import { app } from "electron";
@@ -102,6 +103,18 @@ export function getAccounts() {
       groups,
     };
   });
+}
+
+export function updateAccountCookies(id: number, cookies: Cookie[]) {
+  if (!db) throw new Error("Database not initialized");
+
+  const stmt = db.prepare(`
+    UPDATE accounts
+    SET cookies = @cookies, status = 1
+    WHERE id = @id
+  `);
+
+  return stmt.run({ id, cookies: JSON.stringify(cookies) });
 }
 
 export function updateAccountStatus(id: number, status: number) {
