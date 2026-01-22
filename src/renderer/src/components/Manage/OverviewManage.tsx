@@ -22,26 +22,6 @@ const data = [
 export default function Dashboard() {
   return (
     <div className="p-8 space-y-8 animate-in fade-in duration-500 pb-20">
-      <header>
-        <div className="text-sm breadcrumbs opacity-60 mb-1">
-          <ul>
-            <li>
-              <a>Application</a>
-            </li>
-            <li>
-              <a>Analytics</a>
-            </li>
-            <li>Command Center</li>
-          </ul>
-        </div>
-        <h1 className="text-4xl font-extrabold tracking-tight mb-2">
-          Command Center
-        </h1>
-        <p className="opacity-60">
-          Real-time performance across your automation network.
-        </p>
-      </header>
-
       {/* Stats Grid */}
       <div className="stats stats-vertical lg:stats-horizontal shadow bg-base-100 border border-base-300 w-full">
         <div className="stat">
