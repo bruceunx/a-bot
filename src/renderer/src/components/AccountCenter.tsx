@@ -67,8 +67,6 @@ export default function AccountCenter() {
     }
   };
 
-  const activeTab = tabs.find((t) => t.id === activeTabId);
-
   return (
     <div className="flex h-full bg-base-300/30 overflow-hidden animate-in fade-in duration-500">
       {/* Account Sidebar */}
@@ -100,7 +98,7 @@ export default function AccountCenter() {
               `}
             >
               <img
-                src={Icons[acc.platform.toUpperCase() as Platform]}
+                src={Icons[acc.platform]}
                 alt={acc.username}
                 className="size-5"
               />
@@ -180,7 +178,6 @@ export default function AccountCenter() {
             </div>
           )}
         </div>
-
       </div>
     </div>
   );
