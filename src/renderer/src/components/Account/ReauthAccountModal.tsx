@@ -53,8 +53,6 @@ export default function ReauthAccountModal({
             "You reauth the wrong account, please add the account independently!",
           );
         }
-      } else {
-        setError("Failed to auth this account");
       }
     };
 
@@ -80,7 +78,7 @@ export default function ReauthAccountModal({
 
   return (
     <div className="modal modal-open">
-      <div className="modal-box max-w-4xl h-[80vh] flex flex-col p-0">
+      <div className="modal-box max-w-5xl h-[80vh] flex flex-col p-0">
         {/* Header */}
         <div className="flex justify-between items-center p-6 border-b border-base-300">
           <div>

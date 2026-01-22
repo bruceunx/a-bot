@@ -5,7 +5,7 @@ import * as Icons from "../Icons";
 import { ConnectAccountModal } from "./ConnectAccountModal";
 import { GroupManagerModal } from "./GroupManagerModal"; // Import new component
 import { AccountGroupEditor } from "./AccountGroupEditor"; // Import new component
-import { Edit, Trash2, RefreshCw } from "lucide-react";
+import { Edit, Trash2, RefreshCw, Search } from "lucide-react";
 import { IPC } from "@renderer/constants/ipc";
 import { useAccountStore } from "@renderer/store/useAccountStore";
 import ReauthAccountModal from "./ReauthAccountModal";
@@ -200,7 +200,7 @@ export default function Account() {
       {/* --- Control Bar --- */}
       <div className="card bg-base-100 border border-base-300 shadow-sm p-4 mb-6 flex flex-col md:flex-row gap-4 items-center">
         <label className="input input-bordered flex items-center gap-2 flex-1 w-full">
-          <Icons.Search className="w-4 h-4 opacity-50" />
+          <Search className="w-4 h-4 opacity-50" />
           <input
             type="text"
             placeholder="Search accounts..."
@@ -296,14 +296,22 @@ export default function Account() {
                     <span className="text-xs uppercase font-bold opacity-50">
                       {account.platform}
                     </span>
+
+                    {account.status && (
+                      <button
+                        onClick={() => setReauthAccount(account)}
+                        className="hover:cursor-pointer hover:opacity-50"
+                      >
+                        <RefreshCw className="size-4" />
+                      </button>
+                    )}
                   </div>
 
                   <div className="flex gap-1 opacity-100 transition-opacity">
                     {/* EDIT GROUPS BUTTON */}
                     <button
                       type="button"
-                      className="btn btn-ghost btn-circle btn-xs tooltip"
-                      data-tip="Edit Groups"
+                      className="btn btn-ghost btn-circle btn-xs"
                       onClick={() => setEditingAccount(account)}
                     >
                       <Edit className="w-3 h-3" />
@@ -311,8 +319,7 @@ export default function Account() {
 
                     <button
                       type="button"
-                      className="btn btn-ghost btn-circle btn-xs text-error tooltip"
-                      data-tip="Delete Account"
+                      className="btn btn-ghost btn-circle btn-xs text-error"
                       onClick={() => handleDeleteAccount(account.id)}
                     >
                       <Trash2 className="w-3 h-3" />
