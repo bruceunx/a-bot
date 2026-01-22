@@ -41,7 +41,7 @@ export interface PublishingJob {
   id: string;
   content: string;
   imageUrl?: string;
-  targetAccounts: string[]; // IDs of accounts
+  targetAccounts: number[]; // IDs of accounts
   status: TaskStatus;
   timestamp: string;
   progress: number; // 0-100
