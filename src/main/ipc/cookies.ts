@@ -3,7 +3,7 @@ import type { Cookie } from "electron";
 import { ipcMain, webContents } from "electron";
 import { setCookiesToSession } from "../utils";
 
-function getUrlFromCookieDomain(cookie: Cookie): string {
+/* function getUrlFromCookieDomain(cookie: Cookie): string {
   const domain = cookie.domain?.startsWith(".")
     ? cookie.domain.substring(1)
     : cookie.domain;
@@ -11,7 +11,7 @@ function getUrlFromCookieDomain(cookie: Cookie): string {
   const scheme = cookie.secure ? "https" : "http";
   return `${scheme}://${domain}${cookie.path}`;
 }
-
+*/
 export function registerCookieHandles() {
   ipcMain.handle("get-cookies", async (_, webContentsId: number) => {
     try {

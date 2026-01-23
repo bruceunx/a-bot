@@ -12,6 +12,7 @@ import { createWindow } from "./window";
 import { initDatabase } from "./db";
 import { registerGroupsHandles } from "./ipc/groups";
 import { registerAccountsHandles } from "./ipc/accounts";
+import { registerAgentHandles } from "./agent/agents";
 // import { Agent } from "./agent";
 // import { initialize, enable } from "@electron/remote/main";
 
@@ -26,6 +27,7 @@ app.whenReady().then(() => {
   registerCookieHandles();
   registerGroupsHandles();
   registerAccountsHandles();
+  registerAgentHandles();
 
   createWindow();
 
