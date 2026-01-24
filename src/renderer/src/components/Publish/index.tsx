@@ -1,11 +1,20 @@
 import type { PublishingJob } from "../../types";
 
-import { TaskStatus, SocialPlatform } from "../../types";
+import { TaskStatus } from "../../types";
 import { useState, useEffect, useMemo } from "react";
-import { MOCK_ACCOUNTS } from "../../data";
-import * as Icons from "../Icons";
 import { useAccountStore } from "@renderer/store/useAccountStore";
 import { Platform } from "@common/constants";
+
+import {
+  Activity,
+  Clock,
+  CheckCircle,
+  Users,
+  Search,
+  Image,
+  Send,
+  Sparkles,
+} from "lucide-react";
 
 export default function Publisher() {
   const [content, setContent] = useState("");
@@ -107,7 +116,7 @@ export default function Publisher() {
             Publisher Studio
           </h1>
           <div className="flex items-center gap-2 text-sm opacity-60">
-            <Icons.Users className="w-4 h-4" />
+            <Users className="w-4 h-4" />
             <span>Targeting {selectedAccounts.length} selected profiles</span>
           </div>
         </header>
@@ -116,7 +125,7 @@ export default function Publisher() {
         <div className="card bg-base-100 border border-base-300 shadow-sm flex-1 overflow-hidden flex flex-col">
           <div className="p-4 bg-base-200/50 flex flex-wrap gap-2 items-center">
             <label className="input input-sm input-bordered flex items-center gap-2 flex-1 min-w-[150px]">
-              <Icons.Search className="w-4 h-4 opacity-50" />
+              <Search className="w-4 h-4 opacity-50" />
               <input
                 type="text"
                 placeholder="Search..."
@@ -257,14 +266,14 @@ export default function Publisher() {
                   className="btn btn-ghost btn-circle btn-sm"
                   type="button"
                 >
-                  <Icons.Image className="w-5 h-5" />
+                  <Image className="w-5 h-5" />
                 </button>
                 <button
                   type="button"
                   onClick={handleMagicGenerate}
                   className={`btn btn-sm btn-outline gap-2 ${isGenerating ? "loading" : ""}`}
                 >
-                  {!isGenerating && <Icons.Sparkles className="w-4 h-4" />}
+                  {!isGenerating && <Sparkles className="w-4 h-4" />}
                   AI Assist
                 </button>
               </div>
@@ -275,7 +284,7 @@ export default function Publisher() {
                 disabled={selectedAccounts.length === 0 || !content}
                 className="btn btn-primary btn-md shadow-xl gap-2 px-8"
               >
-                <Icons.Send className="w-4 h-4" />
+                <Send className="w-4 h-4" />
                 <span>Queue Post</span>
               </button>
             </div>
@@ -283,63 +292,95 @@ export default function Publisher() {
         </div>
       </div>
 
-      {/* Right Rail: Activity Feed */}
       <div className="w-full md:w-80 flex flex-col h-full gap-6">
-        <div className="card bg-base-200/50 border border-base-300 h-full flex flex-col overflow-hidden">
-          <div className="p-4 border-b border-base-300 flex justify-between items-center bg-base-300/30">
-            <h3 className="text-xs font-bold uppercase tracking-widest opacity-60">
-              Pipeline
-            </h3>
-            <span className="badge badge-sm badge-neutral">{jobs.length}</span>
+        <div className="card bg-base-100 border border-base-300 shadow-sm h-full flex flex-col overflow-hidden">
+          <div className="p-4 border-b border-base-200 flex justify-between items-center bg-base-100">
+            <div className="flex items-center gap-2">
+              <Activity className="w-4 h-4 text-primary" />
+              <h3 className="font-bold text-sm">Task Queue</h3>
+            </div>
+            <div className="badge badge-neutral badge-sm">{jobs.length}</div>
           </div>
 
-          <div className="flex-1 overflow-y-auto p-4 custom-scrollbar space-y-4">
+          <div className="flex-1 overflow-y-auto p-3 custom-scrollbar space-y-3 bg-base-200/30">
             {jobs.length === 0 && (
-              <div className="py-20 text-center opacity-20 italic">
-                <p className="text-sm">Queue is empty</p>
+              <div className="h-full flex flex-col items-center justify-center opacity-40 gap-3">
+                <Clock className="w-8 h-8 opacity-50" />
+                <p className="text-xs font-medium">No active jobs</p>
               </div>
             )}
 
             {jobs.map((job) => (
               <div
                 key={job.id}
-                className="card bg-base-100 border border-base-300 shadow-sm p-3 gap-2"
+                className="card bg-base-100 shadow-sm border border-base-200 p-3.5 gap-3 hover:border-base-300 transition-colors"
               >
-                <div className="flex justify-between items-center">
-                  <div className="flex -space-x-2">
-                    {job.targetAccounts.slice(0, 4).map((accId) => {
-                      const acc = MOCK_ACCOUNTS.find((a) => a.id === accId);
-                      return (
-                        <div
-                          key={accId}
-                          className={`avatar avatar-xs placeholder border-2 border-base-100 rounded-full`}
-                        >
-                          <div className={`${acc?.avatarColor} w-4`}></div>
-                        </div>
-                      );
-                    })}
-                  </div>
+                <div className="flex justify-between items-start">
                   <div
-                    className={`badge badge-xs ${job.status === TaskStatus.COMPLETED ? "badge-success" : "badge-primary animate-pulse"}`}
+                    className={`badge badge-xs font-semibold ${
+                      job.status === TaskStatus.COMPLETED
+                        ? "badge-success badge-outline"
+                        : job.status === TaskStatus.PUBLISHING
+                          ? "badge-primary"
+                          : "badge-ghost"
+                    }`}
                   >
                     {job.status}
                   </div>
+                  <span className="text-[10px] opacity-40 font-mono">
+                    {job.timestamp}
+                  </span>
                 </div>
 
-                <p className="text-[10px] leading-snug line-clamp-2 opacity-70">
-                  {job.content}
-                </p>
+                <div className="bg-base-200/50 p-2 rounded-md">
+                  <p className="text-xs leading-relaxed line-clamp-2 opacity-80">
+                    {job.content}
+                  </p>
+                </div>
 
-                {job.status === TaskStatus.PUBLISHING && (
-                  <progress
-                    className="progress progress-primary w-full h-1"
-                    value={job.progress}
-                    max="100"
-                  ></progress>
-                )}
+                <div className="flex items-center justify-between mt-1">
+                  {/* Avatar Group */}
+                  <div className="flex -space-x-2 overflow-hidden">
+                    {job.targetAccounts.slice(0, 4).map((accId) => {
+                      const acc = accounts.find((a) => a.id === accId);
+                      if (!acc) return null;
+                      return (
+                        <div
+                          key={acc.id}
+                          className="inline-block ring-2 ring-base-100 rounded-full"
+                        >
+                          <img
+                            src={acc.avatar}
+                            className="w-6 h-6 rounded-full"
+                            alt={acc.username}
+                          />
+                        </div>
+                      );
+                    })}
+                    {job.targetAccounts.length > 4 && (
+                      <div className="w-6 h-6 rounded-full bg-neutral text-neutral-content ring-2 ring-base-100 flex items-center justify-center text-[8px] font-bold">
+                        +{job.targetAccounts.length - 4}
+                      </div>
+                    )}
+                  </div>
 
-                <div className="flex justify-between items-center text-[9px] opacity-40">
-                  <span>{job.timestamp}</span>
+                  {/* Progress Indicator */}
+                  {job.status === TaskStatus.PUBLISHING ? (
+                    <div className="flex flex-col items-end gap-1 w-20">
+                      <progress
+                        className="progress progress-primary w-full h-1.5"
+                        value={job.progress}
+                        max="100"
+                      ></progress>
+                      <span className="text-[9px] opacity-50">
+                        {job.progress}%
+                      </span>
+                    </div>
+                  ) : job.status === TaskStatus.COMPLETED ? (
+                    <CheckCircle className="w-4 h-4 text-success opacity-80" />
+                  ) : (
+                    <Clock className="w-4 h-4 text-base-content opacity-20" />
+                  )}
                 </div>
               </div>
             ))}
