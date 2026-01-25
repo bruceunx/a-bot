@@ -37,6 +37,9 @@ interface WebContentsAPI {
   getGroups: () => Promise<Group[] | null>;
   createGroup: (name: string) => Promise<number | null>;
   deleteGroup: (id: number) => Promise<number | null>;
+
+  // agent
+  xhsPublish: () => Promise<null>;
 }
 
 declare global {

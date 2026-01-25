@@ -1,4 +1,10 @@
-import type { Group } from "@common/types";
+import {
+  JobStatus,
+  type TaskStatus,
+  type PublishJob,
+  type PublishTask,
+  type Group,
+} from "@common/types";
 import type { AccountRow, Account } from "./types";
 import type { Cookie } from "electron";
 
@@ -46,11 +52,37 @@ export function initDatabase() {
     );
   `;
 
+  const createJobsTable = `
+    CREATE TABLE IF NOT EXISTS publish_jobs (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      status INTEGER DEFAULT 0, -- 0: Running, 1: Completed, 2: Failed
+      message TEXT, -- JSON stringify message
+      total_tasks INTEGER DEFAULT 0,
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      finished_at DATETIME
+    );
+  `;
+
+  const createJobTasksTable = `
+    CREATE TABLE IF NOT EXISTS publish_job_tasks (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      job_id INTEGER NOT NULL,
+      account_id INTEGER,
+      account_username TEXT,
+      status INTEGER, -- 0: Failed, 1: Success
+      created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+      FOREIGN KEY (job_id) REFERENCES publish_jobs(id) ON DELETE CASCADE,
+      FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE SET NULL
+    );
+  `;
+
   db.transaction(() => {
     if (!db) return;
     db.exec(createTableQuery);
     db.exec(createGroupsTable);
     db.exec(createAccountGroupsTable);
+    db.exec(createJobsTable);
+    db.exec(createJobTasksTable);
   })();
 }
 
@@ -63,8 +95,7 @@ export function addAccount(account: Account) {
     ON CONFLICT(accountId) DO UPDATE SET
       cookies = @cookies,
       username = @username,
-      avatar = @avatar,
-      status = 'active'
+      avatar = @avatar
   `);
 
   return stmt.run({ ...account, cookies: JSON.stringify(account.cookies) });
@@ -177,4 +208,88 @@ export function removeAccountFromGroup(accountId: number, groupId: number) {
   `);
 
   return stmt.run({ accountId, groupId });
+}
+
+export function createJob(
+  totalTasks: number,
+  message?: string,
+): number | bigint {
+  if (!db) throw new Error("Database not initialized");
+
+  const stmt = db.prepare(`
+    INSERT INTO publish_jobs (total_tasks, message, status)
+    VALUES (?, ?, ?)
+  `);
+
+  const result = stmt.run(totalTasks, message || null, JobStatus.Running);
+  return result.lastInsertRowid;
+}
+
+export function addJobTask(
+  jobId: number | bigint,
+  accountId: number,
+  username: string,
+  status: TaskStatus, // Expects 0 or 1
+): number | bigint {
+  if (!db) throw new Error("Database not initialized");
+
+  const stmt = db.prepare(`
+    INSERT INTO publish_job_tasks (job_id, account_id, account_username, status)
+    VALUES (@jobId, @accountId, @username, @status)
+  `);
+
+  const result = stmt.run({
+    jobId,
+    accountId,
+    username,
+    status,
+  });
+  return result.lastInsertRowid;
+}
+
+export function completeJob(
+  jobId: number | bigint,
+  status: JobStatus = JobStatus.Completed,
+): number | bigint {
+  if (!db) throw new Error("Database not initialized");
+
+  const stmt = db.prepare(`
+    UPDATE publish_jobs
+    SET status = ?, finished_at = CURRENT_TIMESTAMP
+    WHERE id = ?
+  `);
+
+  const result = stmt.run(status, jobId);
+  return result.changes;
+}
+
+export function getJobHistory(): PublishJob[] {
+  if (!db) throw new Error("Database not initialized");
+
+  const stmt = db.prepare(`
+    SELECT * FROM publish_jobs
+    ORDER BY created_at DESC
+    LIMIT 50
+  `);
+
+  return stmt.all() as PublishJob[];
+}
+
+export function getJobDetails(jobId: number): PublishJob | null {
+  if (!db) throw new Error("Database not initialized");
+
+  const jobStmt = db.prepare(`SELECT * FROM publish_jobs WHERE id = ?`);
+  const job = jobStmt.get(jobId) as PublishJob | undefined;
+
+  if (!job) return null;
+
+  const taskStmt = db.prepare(`
+    SELECT * FROM publish_job_tasks
+    WHERE job_id = ?
+    ORDER BY id ASC
+  `);
+
+  const tasks = taskStmt.all(jobId) as PublishTask[];
+
+  return { ...job, tasks };
 }

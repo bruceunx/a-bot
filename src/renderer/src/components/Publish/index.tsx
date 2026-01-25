@@ -93,7 +93,15 @@ export default function Publisher() {
     }
   };
 
-  const handlePublish = () => {
+  const handlePublish = async () => {
+    console.log("selectedAccounts", selectedAccounts);
+    const _accounts = accounts.filter((acc) =>
+      selectedAccounts.includes(acc.id),
+    );
+    console.log("accounts", _accounts);
+
+    // await window.electron.ipcRenderer.invoke("xhs-publish");
+
     if (!content || selectedAccounts.length === 0) return;
     const newJob: PublishingJob = {
       id: Date.now().toString(),

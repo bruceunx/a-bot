@@ -35,6 +35,9 @@ const api = {
   getGroups: () => ipcRenderer.invoke("get-groups"),
   createGroup: (name: string) => ipcRenderer.invoke("create-group", name),
   deleteGroup: (id: number) => ipcRenderer.invoke("delete-group", id),
+
+  // agent
+  xhsPublish: () => ipcRenderer.invoke("xhs-publish"),
 };
 
 // Use `contextBridge` APIs to expose Electron APIs to
