@@ -11,18 +11,25 @@ interface Props {
 
 export default function CreateCenter({ account }: Props) {
   const webviewRef = useRef<WebviewTag>(null);
+  const hasInjectedCookies = useRef(false);
 
-  const plaformMetadata =
-    LOGIN_METADATA[account.platform.toUpperCase() as Platform];
+  const plaformMetadata = LOGIN_METADATA[account.platform as Platform];
 
   const [partition] = useState(() => `private_${account.id}_${Date.now()}`);
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: allow
+  useEffect(() => {
+    hasInjectedCookies.current = false;
+  }, [account.id]);
 
   useEffect(() => {
     const webview = webviewRef.current;
     if (!webview) return;
 
     const handleDomReady = async () => {
+      if (hasInjectedCookies.current) return;
       try {
+        hasInjectedCookies.current = true;
         const guestId = webview.getWebContentsId();
         const loadCookieResult = await window.electron.ipcRenderer.invoke(
           "load-cookies",

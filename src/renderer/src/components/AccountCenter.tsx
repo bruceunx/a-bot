@@ -138,7 +138,7 @@ export default function AccountCenter() {
               `}
             >
               <img
-                src={Icons[tab.account.platform.toUpperCase() as Platform]}
+                src={Icons[tab.account.platform as Platform]}
                 alt={tab.account.username}
                 className="size-3"
               />
