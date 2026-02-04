@@ -38,6 +38,7 @@ export default function CreateCenter({ account }: Props) {
           plaformMetadata.cookie_url,
         );
         console.log("loadCookieResult", loadCookieResult);
+        webview.reload();
       } catch (error) {
         console.error("Failed to execute JS in webview:", error);
       }
