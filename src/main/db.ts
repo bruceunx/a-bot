@@ -293,3 +293,85 @@ export function getJobDetails(jobId: number): PublishJob | null {
 
   return { ...job, tasks };
 }
+
+export interface DashboardStats {
+  totalAccounts: number;
+  activeAccounts: number;
+  totalJobs: number;
+  runningJobs: number;
+  successRate: number;
+  recentJobs: PublishJob[];
+  dailyStats: { date: string; success: number; failed: number }[];
+}
+
+export function getDashboardStats(): DashboardStats {
+  if (!db) throw new Error("Database not initialized");
+
+  // 1. Account Stats
+  const accountStats = db
+    .prepare(`
+    SELECT
+      COUNT(*) as total,
+      SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END) as active
+    FROM accounts
+  `)
+    .get() as { total: number; active: number };
+
+  // 2. Job Stats
+  const jobStats = db
+    .prepare(`
+    SELECT
+      COUNT(*) as total,
+      SUM(CASE WHEN status = 0 THEN 1 ELSE 0 END) as running
+    FROM publish_jobs
+  `)
+    .get() as { total: number; running: number };
+
+  // 3. Task Success Rate (All time)
+  const taskStats = db
+    .prepare(`
+    SELECT
+      COUNT(*) as total,
+      SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END) as success
+    FROM publish_job_tasks
+  `)
+    .get() as { total: number; success: number };
+
+  const successRate =
+    taskStats.total > 0
+      ? Math.round((taskStats.success / taskStats.total) * 100)
+      : 0;
+
+  // 4. Chart Data: Last 7 days task performance
+  const dailyStatsRaw = db
+    .prepare(`
+    SELECT
+      DATE(created_at) as date,
+      SUM(CASE WHEN status = 1 THEN 1 ELSE 0 END) as success,
+      SUM(CASE WHEN status = 0 THEN 1 ELSE 0 END) as failed
+    FROM publish_job_tasks
+    WHERE created_at >= date('now', '-7 days')
+    GROUP BY DATE(created_at)
+    ORDER BY date ASC
+  `)
+    .all() as { date: string; success: number; failed: number }[];
+
+  // 5. Recent Jobs
+  const recentJobs = db
+    .prepare(`
+    SELECT * FROM publish_jobs
+    ORDER BY created_at DESC
+    LIMIT 5
+  `)
+    .all() as PublishJob[];
+
+  return {
+    totalAccounts: accountStats.total || 0,
+    activeAccounts: accountStats.active || 0,
+    totalJobs: jobStats.total || 0,
+    runningJobs: jobStats.running || 0,
+    successRate,
+    recentJobs,
+    dailyStats: dailyStatsRaw,
+  };
+}
